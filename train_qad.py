@@ -1,5 +1,6 @@
 import os
 import sys
+import itertools
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -17,6 +18,7 @@ def main():
     parser.add_argument("--variable_rank_svd", action="store_true", help="Use Variable-Rank Block-SVD (Attn r=16, MLP r=64)")
     parser.add_argument("--hybrid", action="store_true", help="Use Hybrid Architecture (BlockSVD Attention + INT4 MLP)")
     parser.add_argument("--hybrid_bridge", action="store_true", help="Use Hybrid Architecture + Subspace Bridge")
+    parser.add_argument("--steps", type=int, default=10000, help="Number of training steps")
     args = parser.parse_args()
     
     print("--- QTensor Quantization-Aware Distillation (QAD) ---")
@@ -190,7 +192,8 @@ def main():
     grad_accum_steps = 8
     
     optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, student.parameters()), lr=learning_rate)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=len(dataloader)//grad_accum_steps, eta_min=1e-5)
+    # T_max matches the full step budget so LR decays smoothly over the whole run
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.steps, eta_min=1e-5)
     
     print("Starting Full QAD Run...")
     
@@ -202,7 +205,8 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     from safetensors.torch import save_file
     
-    for batch in dataloader:
+    # Cycle the dataloader infinitely so we can run well past one epoch (1,625 steps)
+    for batch in itertools.cycle(dataloader):
         input_ids = batch["input_ids"].to(device)
         attention_mask = batch["attention_mask"].to(device)
         
@@ -219,10 +223,14 @@ def main():
         z_student_flat = z_student.view(-1, vocab_size)
         z_teacher_flat = z_teacher.view(-1, vocab_size)
         
+        mask_flat = attention_mask.view(-1).bool()
+        z_student_valid = z_student_flat[mask_flat]
+        z_teacher_valid = z_teacher_flat[mask_flat]
+        
         # Distillation Loss
         loss_kl = nn.KLDivLoss(reduction="batchmean")(
-            F.log_softmax(z_student_flat / T, dim=-1),
-            F.softmax(z_teacher_flat / T, dim=-1)
+            F.log_softmax(z_student_valid / T, dim=-1),
+            F.softmax(z_teacher_valid / T, dim=-1)
         ) * (T ** 2)
         
         # Hidden-State MSE Loss
@@ -231,7 +239,11 @@ def main():
         for l in anchor_layers:
             student_h = outputs_student.hidden_states[l]
             teacher_h = outputs_teacher.hidden_states[l].detach()
-            mse_loss += torch.nn.functional.mse_loss(student_h, teacher_h)
+            
+            student_h_valid = student_h[attention_mask.bool()]
+            teacher_h_valid = teacher_h[attention_mask.bool()]
+            
+            mse_loss += torch.nn.functional.mse_loss(student_h_valid, teacher_h_valid)
         mse_loss = mse_loss / len(anchor_layers)
         
         loss = loss_kl + mse_loss
@@ -258,13 +270,13 @@ def main():
                 save_file(save_dict, out_path)
                 print(f"Saved checkpoint to {out_path}", flush=True)
                 
-            if actual_step >= 500:
-                print("Reached 500 steps. Stopping early for evaluation.", flush=True)
+            if actual_step >= args.steps:
+                print(f"Reached {args.steps} steps. Stopping for final evaluation.", flush=True)
                 break
                 
         step += 1
         
-        if (step // grad_accum_steps) >= 500:
+        if (step // grad_accum_steps) >= args.steps:
             break
 
     # 4. Final Checkpointing
