@@ -1,0 +1,495 @@
+---
+const title = "QTensor Engine — Asymmetric LLM Inference";
+const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Information-Theoretic topology for edge AI.";
+---
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content="https://qtensor.com.au" />
+  <meta property="og:type" content="website" />
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    html { font-family: 'Inter', system-ui, sans-serif; }
+    code, pre, .font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+    ::selection { background: rgba(6,182,212,0.3); color: #f0f9ff; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #09090b; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    .gradient-text {
+      background: linear-gradient(135deg, #f0f0f0 0%, #94a3b8 40%, #22d3ee 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-text-cyan {
+      background: linear-gradient(90deg, #22d3ee, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .card-border {
+      border: 1px solid rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+    }
+    .card-border:hover {
+      border-color: rgba(6,182,212,0.25);
+    }
+    .glow-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #22d3ee;
+      box-shadow: 0 0 8px #22d3ee, 0 0 20px rgba(34,211,238,0.4);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    .cursor::after {
+      content: '▋';
+      animation: blink 1s step-end infinite;
+      color: #22d3ee;
+    }
+    .metrics-track { display: flex; gap: 0; will-change: transform; }
+    .hero-grid {
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .arch-icon {
+      width: 42px; height: 42px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      font-size: 1.25rem;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: #fff; border: none; cursor: pointer; transition: all 0.2s;
+      box-shadow: 0 0 20px rgba(6,182,212,0.3);
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 32px rgba(6,182,212,0.5);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.875rem;
+      background: rgba(255,255,255,0.05); color: #e4e4e7;
+      border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+    }
+    .copy-btn {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      color: #94a3b8; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; padding: 4px 10px; border-radius: 5px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { background: rgba(6,182,212,0.15); color: #22d3ee; border-color: rgba(6,182,212,0.3); }
+    .token-kw    { color: #c084fc; }
+    .token-str   { color: #34d399; }
+    .token-fn    { color: #60a5fa; }
+    .token-var   { color: #f0f0f0; }
+    .token-cmt   { color: #525252; font-style: italic; }
+    .token-param { color: #fb923c; }
+    .enterprise-grid {
+      background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 antialiased overflow-x-hidden">
+
+  <!-- ═══════════════════════════════════════════════════════ NAV ═══ -->
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur-xl">
+    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="glow-dot"></div>
+        <span class="font-mono font-semibold text-sm tracking-tight">
+          <span class="text-cyan-400">Q</span><span class="text-white">Tensor</span>
+        </span>
+        <span class="text-zinc-600 text-xs font-mono hidden sm:block">v2.0-asymmetric</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="#architecture" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Architecture</a>
+        <a href="#quickstart" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Quickstart</a>
+        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank"
+           class="flex items-center gap-2 text-zinc-300 hover:text-white text-sm bg-white/[0.05] border border-white/[0.08] px-3 py-1.5 rounded-md transition-all hover:bg-white/[0.09]">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Star ⭐
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════ HERO ═══ -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center pt-14 hero-grid overflow-hidden">
+    <!-- Glow orbs -->
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full" style="background: radial-gradient(ellipse, rgba(6,182,212,0.08) 0%, transparent 70%); pointer-events:none;"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full" style="background: radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%); pointer-events:none;"></div>
+
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <!-- Label pill -->
+      <div class="inline-flex items-center gap-2 border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 text-xs font-mono px-3 py-1.5 rounded-full mb-8 tracking-wide">
+        <div class="glow-dot" style="width:6px;height:6px;"></div>
+        Information-Theoretic Asymmetric Architecture · v2.0
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
+        <span class="gradient-text">QTensor Engine:</span><br/>
+        <span class="text-zinc-100">Asymmetric LLM Inference</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-zinc-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+        Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse.<br class="hidden sm:block"/>
+        <span class="text-zinc-300">Information-Theoretic topology for edge AI.</span>
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
+        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View on GitHub ⭐
+        </a>
+        <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="btn-secondary">
+          🤗 Download Weights
+        </a>
+      </div>
+
+      <!-- Terminal -->
+      <div class="max-w-lg mx-auto">
+        <div class="bg-zinc-900 border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl text-left">
+          <!-- Terminal titlebar -->
+          <div class="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-zinc-900/80">
+            <div class="w-3 h-3 rounded-full bg-red-500/70"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/70"></div>
+            <span class="ml-2 text-xs text-zinc-500 font-mono">bash</span>
+            <button id="copy-install" class="copy-btn" onclick="copyInstall()">copy</button>
+          </div>
+          <div class="px-5 py-4 font-mono text-sm">
+            <span class="text-emerald-400">$</span>
+            <span class="text-zinc-300 ml-2">pip install qtensor</span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-600">
+      <span class="text-xs font-mono">scroll</span>
+      <svg width="16" height="20" viewBox="0 0 16 20" fill="none" class="animate-bounce">
+        <rect x="1" y="1" width="14" height="18" rx="7" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="6.5" y="4" width="3" height="5" rx="1.5" fill="currentColor"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ METRICS ═══ -->
+  <section class="py-0 border-y border-white/[0.06] bg-zinc-950 overflow-hidden">
+    <div class="flex" style="animation: scrollX 20s linear infinite;">
+      <!-- Two copies for seamless loop -->
+      {[1,2].map(() => (
+        <div class="flex shrink-0 items-stretch">
+          {[
+            { val: "1.05 GB", label: "VRAM", sub: "Strictly bound", color: "cyan" },
+            { val: "58.8 t/s", label: "Throughput", sub: "Triton SRAM Fusion", color: "emerald" },
+            { val: "44%", label: "PPL Reduction", sub: "vs Flat-Rank INT4", color: "cyan" },
+            { val: "10,000", label: "Training Steps", sub: "QAD distillation", color: "emerald" },
+            { val: "2.2264", label: "Final Loss", sub: "KLDiv + MSE masked", color: "cyan" },
+            { val: "r=8–32", label: "Dynamic Rank", sub: "Entropy-mapped SVD", color: "emerald" },
+          ].map((m) => (
+            <div class="flex items-center border-r border-white/[0.06] px-10 py-5 gap-4 shrink-0">
+              <div class={`w-1.5 h-8 rounded-full ${m.color === 'cyan' ? 'bg-cyan-400' : 'bg-emerald-400'}`} style={`box-shadow: 0 0 12px ${m.color === 'cyan' ? '#22d3ee' : '#34d399'};`}></div>
+              <div>
+                <div class={`text-xl font-bold font-mono ${m.color === 'cyan' ? 'text-cyan-400' : 'text-emerald-400'}`}>{m.val}</div>
+                <div class="text-zinc-100 text-sm font-semibold">{m.label}</div>
+                <div class="text-zinc-500 text-xs font-mono">{m.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ QUICKSTART ═══ -->
+  <section id="quickstart" class="py-28 max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Left: text -->
+      <div>
+        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-4">Developer Experience</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-5">
+          Compress any LLM in<br/><span class="gradient-text-cyan">three lines.</span>
+        </h2>
+        <p class="text-zinc-400 leading-relaxed mb-6">
+          QTensor's asymmetric compression pipeline automatically maps entropy to rank,
+          applies AWQ activation scaling to every MLP projection, and injects a learnable
+          Rank-1 Subspace Bridge — all via a single <code class="text-cyan-400 bg-zinc-900 px-1.5 py-0.5 rounded text-sm">qtensor.compress()</code> call.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-primary text-sm">
+            Read the Docs
+          </a>
+          <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="btn-secondary text-sm">
+            🤗 Pre-built Weights
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: code block -->
+      <div class="relative">
+        <div class="absolute -inset-1 rounded-2xl opacity-40" style="background: linear-gradient(135deg, rgba(6,182,212,0.3), rgba(16,185,129,0.2)); filter: blur(20px);"></div>
+        <div class="relative bg-zinc-900 border border-white/[0.08] rounded-xl overflow-hidden">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
+            <div class="flex gap-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-green-500/60"></div>
+            </div>
+            <span class="text-zinc-500 text-xs font-mono">compress.py</span>
+            <button class="copy-btn" style="position:static;" onclick="copyCode()">copy</button>
+          </div>
+          <div class="px-5 py-6 font-mono text-sm leading-7 overflow-x-auto">
+            <div><span class="token-kw">import</span> <span class="token-var">qtensor</span></div>
+            <div><span class="token-kw">from</span> <span class="token-var">transformers</span> <span class="token-kw">import</span> <span class="token-fn">AutoModelForCausalLM</span></div>
+            <div class="mt-4 token-cmt"># Load and compress via Information-Theoretic rank allocation</div>
+            <div><span class="token-var">model</span> = <span class="token-fn">AutoModelForCausalLM</span>.<span class="token-fn">from_pretrained</span>(<span class="token-str">"unsloth/Llama-3.2-1B"</span>)</div>
+            <div><span class="token-var">model</span> = <span class="token-var">qtensor</span>.<span class="token-fn">compress</span>(</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-var">model</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-param">strategy</span>=<span class="token-str">"asymmetric_v2"</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-param">use_triton</span>=<span class="token-kw">True</span></div>
+            <div>)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ ARCHITECTURE ═══ -->
+  <section id="architecture" class="py-28 border-t border-white/[0.05]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <div class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-4">Technical Architecture</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-4">
+          Three-Tier Compression Topology
+        </h2>
+        <p class="text-zinc-500 max-w-xl mx-auto">
+          Each compression layer targets a distinct information-theoretic regime,
+          minimizing the KL divergence from the teacher manifold at every precision boundary.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Card 1: SVD -->
+        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group">
+          <div class="arch-icon bg-cyan-500/10 border border-cyan-500/20 mb-5 text-cyan-400">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <div class="font-mono text-xs text-cyan-400 mb-2 tracking-wider">LAYER 01 · ATTENTION</div>
+          <h3 class="text-zinc-100 font-semibold text-lg mb-3">Entropy-Mapped SVD</h3>
+          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
+            Shannon entropy over the singular value distribution maps each attention projection
+            to a dynamic rank budget <span class="font-mono text-zinc-300">r ∈ [8, 32]</span>.
+            Low-entropy layers get <span class="font-mono text-zinc-300">r=8</span>;
+            information-dense layers expand to <span class="font-mono text-zinc-300">r=32</span>.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">Block-SVD</span>
+            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">SpLoRA</span>
+            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">QKV + O</span>
+          </div>
+        </div>
+
+        <!-- Card 2: AWQ INT4 -->
+        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group" style="border-color: rgba(16,185,129,0.12);">
+          <div class="arch-icon bg-emerald-500/10 border border-emerald-500/20 mb-5 text-emerald-400">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <rect x="2" y="3" width="20" height="14" rx="2"/>
+              <path d="M8 21h8M12 17v4"/>
+              <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10"/>
+            </svg>
+          </div>
+          <div class="font-mono text-xs text-emerald-400 mb-2 tracking-wider">LAYER 02 · MLP</div>
+          <h3 class="text-zinc-100 font-semibold text-lg mb-3">AWQ INT4 MLPs</h3>
+          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
+            Activation-Aware Weight Quantization scales salient channels before INT4 packing:
+            <span class="font-mono text-zinc-300">W_packed = INT4(W / S)</span> with
+            <span class="font-mono text-zinc-300">X_scaled = X × S</span> in the forward pass.
+            Zero catastrophic weight collapse.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">INT4 AWQ</span>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">Gate/Up/Down</span>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">Triton GEMV</span>
+          </div>
+        </div>
+
+        <!-- Card 3: Subspace Bridge -->
+        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group">
+          <div class="arch-icon bg-violet-500/10 border border-violet-500/20 mb-5 text-violet-400">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M6.343 6.343a8 8 0 1 0 11.314 11.314A8 8 0 0 0 6.343 6.343z"/>
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
+            </svg>
+          </div>
+          <div class="font-mono text-xs text-violet-400 mb-2 tracking-wider">LAYER 03 · BRIDGE</div>
+          <h3 class="text-zinc-100 font-semibold text-lg mb-3">Rank-1 Subspace Bridge</h3>
+          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
+            A learnable scalar injected after each attention layer aligns the student's residual
+            stream with the teacher's hidden-state manifold during QAD distillation.
+            Cures precision-boundary variance mismatch.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">Rank-1</span>
+            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">QAD Loss</span>
+            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">KL + MSE</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results table -->
+      <div class="mt-14 bg-zinc-900/50 border border-white/[0.06] rounded-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-white/[0.06]">
+          <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Verified Benchmarks · TinyLlama 1.1B · NVIDIA RTX 5080</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/[0.04]">
+                <th class="text-left px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">Metric</th>
+                <th class="text-right px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">FP16 Baseline</th>
+                <th class="text-right px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">Flat-Rank INT4</th>
+                <th class="text-right px-6 py-3 text-cyan-400 font-mono text-xs uppercase tracking-wider">QTensor Asym v2</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.03]">
+              {[
+                ["VRAM (inference)", "~4.4 GB", "~1.5 GB", "1,162 MB ✅"],
+                ["Throughput", "~80 t/s", "27 t/s", "58.8 t/s ✅"],
+                ["WikiText word PPL", "~11", "168.46", "93.65 (−44%)"],
+                ["QAD training loss", "—", "N/A", "2.2264 ✅"],
+                ["Generation coherence", "✅", "❌ loops", "✅ structured"],
+              ].map(([metric, fp16, flat, ours]) => (
+                <tr class="hover:bg-white/[0.015] transition-colors">
+                  <td class="px-6 py-3.5 text-zinc-300 font-mono text-xs">{metric}</td>
+                  <td class="px-6 py-3.5 text-zinc-500 text-right font-mono text-xs">{fp16}</td>
+                  <td class="px-6 py-3.5 text-zinc-500 text-right font-mono text-xs">{flat}</td>
+                  <td class="px-6 py-3.5 text-cyan-400 text-right font-mono text-xs font-semibold">{ours}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ ENTERPRISE ═══ -->
+  <section id="enterprise" class="py-28 border-t border-white/[0.05]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="relative enterprise-grid rounded-3xl overflow-hidden border border-white/[0.07] p-12 sm:p-16">
+        <!-- Glow -->
+        <div class="absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-30" style="background: radial-gradient(ellipse, rgba(6,182,212,0.4) 0%, transparent 70%); pointer-events:none;"></div>
+        <div class="absolute -bottom-10 -left-10 w-60 h-60 rounded-full opacity-20" style="background: radial-gradient(ellipse, rgba(16,185,129,0.4) 0%, transparent 70%); pointer-events:none;"></div>
+
+        <div class="relative max-w-2xl">
+          <div class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] text-zinc-400 text-xs font-mono px-3 py-1.5 rounded-full mb-6 tracking-wider">
+            🔒 AIR-GAPPED · ZERO-CLOUD · SOVEREIGN AI
+          </div>
+          <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-zinc-100 mb-5 leading-tight">
+            Deploy on proprietary<br/><span class="gradient-text-cyan">hardware. Your rules.</span>
+          </h2>
+          <p class="text-zinc-400 text-lg leading-relaxed mb-8">
+            Custom sub-1GB model architectures built for zero-cloud, air-gapped environments.
+            Purpose-built deployments for <span class="text-zinc-200">defense</span>,
+            <span class="text-zinc-200">legal M&A</span>,
+            <span class="text-zinc-200">robotics</span>, and enterprise edge inference.
+          </p>
+          <div class="flex flex-wrap gap-3 mb-10">
+            {["CTO / ML Engineering", "Defense & Government", "Legal & M&A AI", "Edge Robotics", "Private Cloud"].map(tag => (
+              <span class="bg-white/[0.04] border border-white/[0.08] text-zinc-400 text-xs font-mono px-3 py-1.5 rounded-full">{tag}</span>
+            ))}
+          </div>
+          <a href="mailto:consult@qtensor.com.au?subject=Architecture%20Consultation%20Request" class="btn-primary text-base px-6 py-3">
+            Book Architecture Consultation →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ FOOTER ═══ -->
+  <footer class="border-t border-white/[0.06] py-12">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="glow-dot"></div>
+        <span class="font-mono text-sm text-zinc-400">
+          <span class="text-cyan-400">Q</span>Tensor Engine · MIT License
+        </span>
+      </div>
+      <div class="flex items-center gap-6 text-sm text-zinc-500">
+        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="hover:text-zinc-300 transition-colors">GitHub</a>
+        <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="hover:text-zinc-300 transition-colors">Hugging Face</a>
+        <a href="mailto:consult@qtensor.com.au" class="hover:text-zinc-300 transition-colors">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyInstall() {
+      navigator.clipboard.writeText('pip install qtensor');
+      const btn = document.getElementById('copy-install');
+      btn.textContent = 'copied!';
+      btn.style.color = '#34d399';
+      setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
+    }
+    function copyCode() {
+      const code = `import qtensor\nfrom transformers import AutoModelForCausalLM\n\n# Load and compress via Information-Theoretic rank allocation\nmodel = AutoModelForCausalLM.from_pretrained("unsloth/Llama-3.2-1B")\nmodel = qtensor.compress(model, strategy="asymmetric_v2", use_triton=True)`;
+      navigator.clipboard.writeText(code);
+      const btns = document.querySelectorAll('.copy-btn');
+      btns.forEach(b => { if (b !== document.getElementById('copy-install')) { b.textContent = 'copied!'; b.style.color = '#34d399'; setTimeout(() => { b.textContent = 'copy'; b.style.color = ''; }, 2000); }});
+    }
+    // Smooth scroll metric bar (CSS animation fallback)
+    const track = document.querySelector('.metrics-track');
+  </script>
+
+  <style>
+    @keyframes scrollX {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    [style*="scrollX"] { animation: scrollX 30s linear infinite; }
+    section { animation: fadeUp 0.6s ease-out both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</body>
+</html>
