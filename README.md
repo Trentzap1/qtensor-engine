@@ -19,6 +19,7 @@ language:
 [![PyTorch 2.13](https://img.shields.io/badge/PyTorch-2.13%2Bcu132-EE4C2C.svg)](https://pytorch.org/)
 [![CUDA 13.2](https://img.shields.io/badge/CUDA-13.2-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
 [![NVIDIA RTX 5080](https://img.shields.io/badge/Hardware-NVIDIA_Blackwell_RTX_5080-76B900.svg)](https://www.nvidia.com)
+[![Hugging Face Model](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-QTensor--TinyLlama--1.1B--Asymmetric--v2-yellow)](https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2)
 
 > **Preserving structural reasoning geometries in Large Language Models via 160-Bit Fixed-Point Tensor Decomposition, Triton SRAM Fusion, and Stacked FP8 Quantization.**
 
@@ -93,7 +94,33 @@ Standard AI compression paradigms (such as FP32 or FP16 SVD) contaminate decompo
 
 ## 🛠 Quickstart Guide
 
-### 1. Installation
+### 1. One-Line Download from Hugging Face Hub
+
+The latest **Asymmetric v2** weights are available directly on Hugging Face. No local build required:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+tokenizer = AutoTokenizer.from_pretrained(
+    "trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2"
+)
+model = AutoModelForCausalLM.from_pretrained(
+    "trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2",
+    trust_remote_code=True,
+    device_map="cuda",
+)
+
+messages = [{"role": "user", "content": "Explain entropy-based SVD rank allocation."}]
+prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+inputs = tokenizer(prompt, return_tensors="pt").to("cuda")
+
+with torch.no_grad():
+    outputs = model.generate(**inputs, max_new_tokens=200)
+    print(tokenizer.decode(outputs[0][inputs["input_ids"].shape[-1]:], skip_special_tokens=True))
+```
+
+### 2. Installation (build from source)
 
 ```bash
 git clone https.github.com/Trentzap1/qtensor.git
