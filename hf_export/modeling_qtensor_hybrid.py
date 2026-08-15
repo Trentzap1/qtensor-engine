@@ -43,7 +43,7 @@ def make_hybrid_bridge_forward(layer):
     return forward
 
 class QTensorINT4LoRALinear(nn.Module):
-    def __init__(self, in_features, out_features, lora_rank=256, lora_alpha=512):
+    def __init__(self, in_features, out_features, lora_rank=256, lora_alpha=512, awq_scales=None):
         super().__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -52,6 +52,15 @@ class QTensorINT4LoRALinear(nn.Module):
         self.register_buffer("scales", torch.zeros(out_features, dtype=torch.bfloat16))
         self.register_buffer("zeros", torch.zeros(out_features, dtype=torch.bfloat16))
         
+        if awq_scales is not None:
+            scales = torch.tensor(awq_scales, dtype=torch.bfloat16)
+            # Normalize scales to mean 1.0 to prevent global shifts, then clamp to avoid underflow
+            scales = scales / scales.mean()
+            scales = torch.clamp(scales, min=0.1, max=10.0)
+            self.register_buffer("awq_activation_scales", scales)
+        else:
+            self.register_buffer("awq_activation_scales", torch.ones(in_features, dtype=torch.bfloat16))
+            
         self.actual_lora = min(lora_rank, in_features, out_features)
         self.lora_scaling = lora_alpha / self.actual_lora
         
@@ -67,9 +76,12 @@ class QTensorINT4LoRALinear(nn.Module):
         else:
             X_2d = X
             
+        # Multiply input by scales to counteract the weight division (AWQ protection)
+        X_scaled = X_2d * self.awq_activation_scales
+        
         if X_2d.shape[0] == 1:
             from qtensor.triton_kernel import fused_int4_gemv
-            base_out = fused_int4_gemv(X_2d.to(torch.bfloat16), self.weight_packed, self.scales, self.zeros)
+            base_out = fused_int4_gemv(X_scaled.to(torch.bfloat16), self.weight_packed, self.scales, self.zeros)
         else:
             low = self.weight_packed & 0x0F
             high = (self.weight_packed >> 4) & 0x0F
@@ -79,7 +91,7 @@ class QTensorINT4LoRALinear(nn.Module):
             
             weight_deq = weight_int4 * self.scales.unsqueeze(1) + self.zeros.unsqueeze(1)
             
-            base_out = torch.matmul(X_2d.to(torch.bfloat16), weight_deq.t())
+            base_out = torch.matmul(X_scaled.to(torch.bfloat16), weight_deq.t())
         
         lora_out = (X_2d.to(torch.bfloat16) @ self.lora_B) @ self.lora_A
         Y_lora = lora_out * self.lora_scaling
@@ -91,14 +103,19 @@ class QTensorINT4LoRALinear(nn.Module):
         return Y_2d
 
 def quantize_int4_and_inject(module, W_dense):
+    # Apply AWQ scaling before quantization
+    S = module.awq_activation_scales # shape [in_features]
+    # Divide by S to suppress salient channels before INT4 packing
+    W_scaled = W_dense / S.unsqueeze(0)
+    
     qmin = 0
     qmax = 15
-    W_min = W_dense.min(dim=1)[0]
-    W_max = W_dense.max(dim=1)[0]
+    W_min = W_scaled.min(dim=1)[0]
+    W_max = W_scaled.max(dim=1)[0]
     scale = (W_max - W_min) / (qmax - qmin)
     scale = torch.where(scale == 0, torch.ones_like(scale), scale)
     
-    W_int = torch.round((W_dense - W_min.unsqueeze(1)) / scale.unsqueeze(1)).to(torch.uint8)
+    W_int = torch.round((W_scaled - W_min.unsqueeze(1)) / scale.unsqueeze(1)).to(torch.uint8)
     W_int = torch.clamp(W_int, qmin, qmax)
     
     W_view = W_int.view(module.out_features, module.in_features // 2, 2)
@@ -108,26 +125,43 @@ def quantize_int4_and_inject(module, W_dense):
     module.scales.copy_(scale.to(torch.bfloat16))
     module.zeros.copy_(W_min.to(torch.bfloat16))
 
-def replace_with_qtensor_hybrid(module):
+def replace_with_qtensor_hybrid(model, config_path="qtensor_optimal_config.json"):
+    import json
+    import os
+    if os.path.exists(config_path):
+        with open(config_path, "r") as f:
+            optimal_config = json.load(f)
+    else:
+        optimal_config = {"svd_ranks": {}, "awq_scales": {}}
+        
     attn_suffixes = ["q_proj", "k_proj", "v_proj", "o_proj"]
     mlp_suffixes = ["gate_proj", "up_proj", "down_proj"]
     
-    for name, child in module.named_children():
-        if isinstance(child, nn.Linear):
-            if any(name.endswith(suffix) for suffix in attn_suffixes):
-                qtensor_layer = QTensorBlockSVDLinear(
-                    child.in_features, child.out_features, 
-                    block_size=1024, svd_rank=16
-                )
-                setattr(module, name, qtensor_layer)
-            elif any(name.endswith(suffix) for suffix in mlp_suffixes):
-                qtensor_layer = QTensorINT4LoRALinear(
-                    child.in_features, child.out_features
-                )
-                setattr(module, name, qtensor_layer)
+    for name, module in model.named_modules():
+        if '.' in name:
+            parent_name = name.rsplit('.', 1)[0]
+            child_name = name.rsplit('.', 1)[1]
+            parent = model.get_submodule(parent_name)
         else:
-            replace_with_qtensor_hybrid(child)
-    return module
+            parent = model
+            child_name = name
+            
+        if isinstance(module, nn.Linear):
+            if any(name.endswith(suffix) for suffix in attn_suffixes):
+                svd_rank = optimal_config.get("svd_ranks", {}).get(name, 16)
+                qtensor_layer = QTensorBlockSVDLinear(
+                    module.in_features, module.out_features, 
+                    block_size=1024, svd_rank=svd_rank
+                )
+                setattr(parent, child_name, qtensor_layer)
+            elif any(name.endswith(suffix) for suffix in mlp_suffixes):
+                awq_scales = optimal_config.get("awq_scales", {}).get(name, None)
+                qtensor_layer = QTensorINT4LoRALinear(
+                    module.in_features, module.out_features,
+                    awq_scales=awq_scales
+                )
+                setattr(parent, child_name, qtensor_layer)
+    return model
 
 class QTensorHybridLlamaForCausalLM(LlamaForCausalLM):
     def __init__(self, config, use_bridge=False):
