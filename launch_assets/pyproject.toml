@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qtensor"
+version = "0.1.0"
+description = "Quantum-Inspired AI Compiler: 160-Bit SVD Model Compression for LLMs"
+authors = [
+  { name="Trent Ian Parsons", email="trent.parsons.93@gmail.com" },
+]
+license = { text="MIT" }
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = ["tensor-networks", "LLM-compression", "SVD", "quantization", "LoRA", "CUDA", "Blackwell"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.2.0",
+    "cupy-cuda12x",
+    "transformers",
+    "accelerate",
+    "datasets",
+    "triton>=2.3.0",
+    "safetensors>=0.4.3",
+    "typer>=0.12.0"
+]
+
+[project.scripts]
+qtensor = "qtensor.cli:app"
+
+[project.urls]
+"Homepage" = "https://github.com/Trentzap1/qtensor-engine"
+"Bug Tracker" = "https://github.com/Trentzap1/qtensor-engine/issues"
