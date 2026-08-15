@@ -10,8 +10,9 @@ def block_svd_fused_kernel(
     stride_vo, stride_vi, stride_vk, stride_vr,
     stride_uo, stride_ui, stride_uk, stride_ur,
     stride_ym, stride_yk,
+    RANK_R,
     BLOCK_M: tl.constexpr, BLOCK_N: tl.constexpr, BLOCK_K: tl.constexpr, 
-    RANK_R: tl.constexpr, BLOCK_SIZE: tl.constexpr
+    BLOCK_R: tl.constexpr, BLOCK_SIZE: tl.constexpr
 ):
     """
     Highly optimized memory-efficient Triton Kernel for Block-SVD.
@@ -26,7 +27,8 @@ def block_svd_fused_kernel(
     offs_m = pid_m * BLOCK_M + tl.arange(0, BLOCK_M)
     offs_n = tl.arange(0, BLOCK_N)
     offs_k = tl.arange(0, BLOCK_K)
-    offs_r = tl.arange(0, RANK_R)
+    offs_r = tl.arange(0, BLOCK_R)
+    mask_r = offs_r < RANK_R
     
     # Calculate logical block offsets
     out_offset = pid_n * BLOCK_N
@@ -41,24 +43,24 @@ def block_svd_fused_kernel(
     for i in range(num_blocks_in):
         # 1. Compute Z_i = X_i @ V_{o,i}
         # X_i is [M, BLOCK_SIZE], V is [BLOCK_SIZE, RANK_R]
-        Z_i = tl.zeros([BLOCK_M, RANK_R], dtype=tl.float32)
+        Z_i = tl.zeros([BLOCK_M, BLOCK_R], dtype=tl.float32)
         
         for k_in in range(0, BLOCK_SIZE, BLOCK_K):
             # Load X tile [BLOCK_M, BLOCK_K]
             x_ptrs = X_ptr + (offs_m[:, None] * stride_xm + (i * BLOCK_SIZE + k_in + offs_k[None, :]) * stride_xk)
             X_tile = tl.load(x_ptrs, mask=mask_m[:, None], other=0.0)
             
-            # Load V tile [BLOCK_K, RANK_R]
+            # Load V tile [BLOCK_K, BLOCK_R]
             v_ptrs = V_proj_ptr + (block_o * stride_vo + i * stride_vi + (k_in + offs_k[:, None]) * stride_vk + offs_r[None, :] * stride_vr)
-            V_tile = tl.load(v_ptrs)
+            V_tile = tl.load(v_ptrs, mask=mask_r[None, :], other=0.0)
             
             Z_i += tl.dot(X_tile, V_tile, allow_tf32=True)
             
         # 2. Multiply Z_i @ U_{o,i}^T
-        # Z_i is [BLOCK_M, RANK_R]
-        # Load U tile [BLOCK_N, RANK_R]
+        # Z_i is [BLOCK_M, BLOCK_R]
+        # Load U tile [BLOCK_N, BLOCK_R]
         u_ptrs = U_proj_ptr + (block_o * stride_uo + i * stride_ui + (inner_k_out + offs_n[:, None]) * stride_uk + offs_r[None, :] * stride_ur)
-        U_tile = tl.load(u_ptrs)
+        U_tile = tl.load(u_ptrs, mask=mask_r[None, :], other=0.0)
         
         acc += tl.dot(Z_i.to(U_tile.dtype), tl.trans(U_tile), allow_tf32=True)
         
@@ -95,8 +97,9 @@ def fused_block_svd_splora(X_padded, V_proj, U_proj):
         V_proj.stride(0), V_proj.stride(1), V_proj.stride(2), V_proj.stride(3),
         U_proj.stride(0), U_proj.stride(1), U_proj.stride(2), U_proj.stride(3),
         Y.stride(0), Y.stride(1),
+        svd_rank,
         BLOCK_M=BLOCK_M, BLOCK_N=BLOCK_N, BLOCK_K=BLOCK_K, 
-        RANK_R=svd_rank, BLOCK_SIZE=block_size,
+        BLOCK_R=32, BLOCK_SIZE=block_size,
     )
     
     return Y
@@ -106,7 +109,7 @@ def int4_gemv_kernel(
     X_ptr, W_ptr, Scales_ptr, Zeros_ptr, Y_ptr,
     in_features, out_features,
     stride_w_out, stride_w_in,
-    BLOCK_IN: tl.constexpr, BLOCK_OUT: tl.constexpr
+    BLOCK_K: tl.constexpr, BLOCK_OUT: tl.constexpr
 ):
     pid = tl.program_id(0)
     offs_out = pid * BLOCK_OUT + tl.arange(0, BLOCK_OUT)
@@ -118,13 +121,12 @@ def int4_gemv_kernel(
     
     acc = tl.zeros([BLOCK_OUT], dtype=tl.float32)
     
-    # We iterate over the input features in blocks of BLOCK_IN (unpacked).
+    # We iterate over the input features in blocks of BLOCK_K (unpacked).
     # Since each packed byte holds 2 features, the packed dimension is in_features // 2.
-    # We load blocks of size BLOCK_IN // 2 from W.
     packed_in_features = in_features // 2
     
-    for k in range(0, packed_in_features, BLOCK_IN // 2):
-        offs_w_k = tl.arange(0, BLOCK_IN // 2)
+    for k in range(0, packed_in_features, BLOCK_K):
+        offs_w_k = tl.arange(0, BLOCK_K)
         mask_w_k = (k + offs_w_k) < packed_in_features
         
         # Load packed weights
@@ -136,11 +138,9 @@ def int4_gemv_kernel(
         w_high = (w_packed >> 4) & 0x0F
         
         # Load X (even and odd separately)
-        # Even indices correspond to w_low
         offs_x_even = (k + offs_w_k) * 2
         x_even = tl.load(X_ptr + offs_x_even, mask=offs_x_even < in_features, other=0.0)
         
-        # Odd indices correspond to w_high
         offs_x_odd = (k + offs_w_k) * 2 + 1
         x_odd = tl.load(X_ptr + offs_x_odd, mask=offs_x_odd < in_features, other=0.0)
         
@@ -168,7 +168,9 @@ def fused_int4_gemv(X, W_packed, scales, zeros):
     
     Y = torch.empty((out_features,), device=X.device, dtype=X.dtype)
     
-    BLOCK_IN = 256 # multiple of 2
+    # We use BLOCK_K=64 to prevent massive register spilling that was destroying throughput.
+    # W_packed is loaded in [BLOCK_OUT, BLOCK_K] chunks (e.g. 64x64).
+    BLOCK_K = 64 
     BLOCK_OUT = 64
     
     grid = lambda meta: (triton.cdiv(out_features, meta['BLOCK_OUT']), )
@@ -177,7 +179,7 @@ def fused_int4_gemv(X, W_packed, scales, zeros):
         X_1d, W_packed, scales, zeros, Y,
         in_features, out_features,
         W_packed.stride(0), W_packed.stride(1),
-        BLOCK_IN=BLOCK_IN, BLOCK_OUT=BLOCK_OUT
+        BLOCK_K=BLOCK_K, BLOCK_OUT=BLOCK_OUT
     )
     
     if len(original_shape) > 1:
