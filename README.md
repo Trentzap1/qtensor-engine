@@ -15,6 +15,7 @@ language:
 # 🌀 QTensor: Quantum-Inspired AI Compiler & Serving Framework
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Website](https://img.shields.io/badge/Website-qtensor.com.au-22d3ee)](https://qtensor.com.au)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
 [![PyTorch 2.13](https://img.shields.io/badge/PyTorch-2.13%2Bcu132-EE4C2C.svg)](https://pytorch.org/)
 [![CUDA 13.2](https://img.shields.io/badge/CUDA-13.2-76B900.svg)](https://developer.nvidia.com/cuda-toolkit)
