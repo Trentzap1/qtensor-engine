@@ -215,12 +215,11 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
       {[1,2].map(() => (
         <div class="flex shrink-0 items-stretch">
           {[
-            { val: "1.05 GB", label: "VRAM", sub: "Strictly bound", color: "cyan" },
-            { val: "58.8 t/s", label: "Throughput", sub: "Triton SRAM Fusion", color: "emerald" },
-            { val: "44%", label: "PPL Reduction", sub: "vs Flat-Rank INT4", color: "cyan" },
-            { val: "10,000", label: "Training Steps", sub: "QAD distillation", color: "emerald" },
-            { val: "2.2264", label: "Final Loss", sub: "KLDiv + MSE masked", color: "cyan" },
-            { val: "r=8–32", label: "Dynamic Rank", sub: "Entropy-mapped SVD", color: "emerald" },
+            { val: "4.67 GB", label: "VRAM", sub: "Fits Consumer GPUs", color: "cyan" },
+            { val: "32.93 t/s", label: "Throughput", sub: "Real-Time Generation", color: "emerald" },
+            { val: "8.03B", label: "Parameters", sub: "Base Meta-Llama-3", color: "cyan" },
+            { val: "Step 230", label: "Alpha Release", sub: "Actively Training", color: "emerald" },
+            { val: "Zero-Overhead", label: "Inference", sub: "Folded ASVD-Bridge", color: "cyan" },
           ].map((m) => (
             <div class="flex items-center border-r border-white/[0.06] px-10 py-5 gap-4 shrink-0">
               <div class={`w-1.5 h-8 rounded-full ${m.color === 'cyan' ? 'bg-cyan-400' : 'bg-emerald-400'}`} style={`box-shadow: 0 0 12px ${m.color === 'cyan' ? '#22d3ee' : '#34d399'};`}></div>
@@ -325,7 +324,7 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
           <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-primary text-sm">
             Read the Docs
           </a>
-          <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="btn-secondary text-sm">
+          <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="btn-secondary text-sm">
             🤗 Pre-built Weights
           </a>
         </div>
@@ -541,7 +540,7 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
       </div>
       <div class="flex items-center gap-6 text-sm text-zinc-500">
         <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="hover:text-zinc-300 transition-colors">GitHub</a>
-        <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="hover:text-zinc-300 transition-colors">Hugging Face</a>
+        <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="hover:text-zinc-300 transition-colors">Hugging Face</a>
         <a href="mailto:consult@qtensor.com.au" class="hover:text-zinc-300 transition-colors">Contact</a>
       </div>
     </div>
