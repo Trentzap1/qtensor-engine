@@ -154,24 +154,27 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
 
       <!-- Headline -->
       <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
-        <span class="gradient-text">QTensor Engine:</span><br/>
-        <span class="text-zinc-100">Asymmetric LLM Inference</span>
+        <span class="gradient-text">ASVD-Bridge:</span><br/>
+        <span class="text-zinc-100">Zero-Overhead Subspace Stabilization</span>
       </h1>
 
       <!-- Subheadline -->
       <p class="text-zinc-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-        Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse.<br class="hidden sm:block"/>
-        <span class="text-zinc-300">Information-Theoretic topology for edge AI.</span>
+        Compressing an 8-Billion Parameter LLM to a 4.67 GB VRAM Footprint at 32+ TPS.
       </p>
 
       <!-- CTA Buttons -->
       <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
-        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          View on GitHub ⭐
+        <a href="/ASVD_Bridge_Paper.pdf" target="_blank" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8" stroke="currentColor" fill="none" stroke-width="2"></polyline></svg>
+          Read the Paper (PDF)
         </a>
-        <a href="https://huggingface.co/trentzap/QTensor-TinyLlama-1.1B-Asymmetric-v2" target="_blank" class="btn-secondary">
-          🤗 Download Weights
+        <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="btn-secondary">
+          🤗 Download Weights on Hugging Face
+        </a>
+        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          View Source Code
         </a>
       </div>
 
@@ -233,7 +236,55 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════ QUICKSTART ═══ -->
+  
+  <!-- ═══════════════════════════════════════════════════════ HOW IT WORKS ═══ -->
+  <section id="how-it-works" class="py-28 border-t border-white/[0.05] bg-zinc-950/50 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/10 via-zinc-950 to-zinc-950"></div>
+    <div class="relative max-w-4xl mx-auto px-6 text-center">
+      <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-4">Architecture Concept</div>
+      <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-6">
+        The Pressure Regulator for Neural Networks
+      </h2>
+      <p class="text-zinc-400 text-lg leading-relaxed max-w-3xl mx-auto">
+        Think of an AI model like a massive city water grid. Compressing it shrinks the pipes, which causes the mathematical 'water pressure' (tensor variance) to drop, breaking the downstream valves. The Subspace Bridge acts as a dynamic pressure regulator placed immediately after the compressed pipes to recalibrate the pressure. Because it is a Rank-1 transformation, we permanently weld that regulator directly into the pipe itself after training, costing zero extra compute during inference.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ BENCHMARKS ═══ -->
+  <section id="benchmarks" class="pb-28 pt-10 max-w-5xl mx-auto px-6 relative z-10">
+    <div class="bg-zinc-900/50 border border-white/[0.06] rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm">
+      <div class="px-6 py-4 border-b border-white/[0.06] bg-zinc-900/80">
+        <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Verified Benchmarks · ASVD-Bridge (Step 230) · NVIDIA RTX 5080</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-white/[0.04]">
+              <th class="text-left px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">Metric</th>
+              <th class="text-right px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">FP16 Baseline</th>
+              <th class="text-right px-6 py-4 text-cyan-400 font-mono text-xs uppercase tracking-wider">ASVD-Bridge Demo</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/[0.03]">
+            {[
+              ["VRAM Footprint", "~15.0 GB", "4.67 GB \u2705"],
+              ["Throughput", "~15 t/s", "32.93 t/s \u2705"],
+              ["Coherence Status", "Full Pre-trained", "Early Syntax Healing (Step 230) \u26A0\uFE0F"],
+            ].map(([metric, fp16, ours]) => (
+              <tr class="hover:bg-white/[0.02] transition-colors">
+                <td class="px-6 py-4 text-zinc-300 font-mono text-xs font-semibold">{metric}</td>
+                <td class="px-6 py-4 text-zinc-500 text-right font-mono text-xs">{fp16}</td>
+                <td class="px-6 py-4 text-cyan-400 text-right font-mono text-xs font-semibold">{ours}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+<!-- ═══════════════════════════════════════════════════════ QUICKSTART ═══ -->
   <section id="quickstart" class="py-28 max-w-6xl mx-auto px-6">
     <div class="grid lg:grid-cols-2 gap-16 items-center">
       <!-- Left: text -->
@@ -373,41 +424,7 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
         </div>
       </div>
 
-      <!-- Results table -->
-      <div class="mt-14 bg-zinc-900/50 border border-white/[0.06] rounded-2xl overflow-hidden">
-        <div class="px-6 py-4 border-b border-white/[0.06]">
-          <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Verified Benchmarks · TinyLlama 1.1B · NVIDIA RTX 5080</span>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead>
-              <tr class="border-b border-white/[0.04]">
-                <th class="text-left px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">Metric</th>
-                <th class="text-right px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">FP16 Baseline</th>
-                <th class="text-right px-6 py-3 text-zinc-500 font-mono text-xs uppercase tracking-wider">Flat-Rank INT4</th>
-                <th class="text-right px-6 py-3 text-cyan-400 font-mono text-xs uppercase tracking-wider">QTensor Asym v2</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-white/[0.03]">
-              {[
-                ["VRAM (inference)", "~4.4 GB", "~1.5 GB", "1,162 MB ✅"],
-                ["Throughput", "~80 t/s", "27 t/s", "58.8 t/s ✅"],
-                ["WikiText word PPL", "~11", "168.46", "93.65 (−44%)"],
-                ["QAD training loss", "—", "N/A", "2.2264 ✅"],
-                ["Generation coherence", "✅", "❌ loops", "✅ structured"],
-              ].map(([metric, fp16, flat, ours]) => (
-                <tr class="hover:bg-white/[0.015] transition-colors">
-                  <td class="px-6 py-3.5 text-zinc-300 font-mono text-xs">{metric}</td>
-                  <td class="px-6 py-3.5 text-zinc-500 text-right font-mono text-xs">{fp16}</td>
-                  <td class="px-6 py-3.5 text-zinc-500 text-right font-mono text-xs">{flat}</td>
-                  <td class="px-6 py-3.5 text-cyan-400 text-right font-mono text-xs font-semibold">{ours}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
-    </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ ENTERPRISE ═══ -->
