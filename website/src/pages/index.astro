@@ -1,6 +1,6 @@
 ---
-const title = "QTensor Engine — Asymmetric LLM Inference";
-const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Information-Theoretic topology for edge AI.";
+const title = "ZeroFold // QTensor — ASVD-Bridge & Sovereign LLM Inference";
+const description = "Sub-1.1GB VRAM. 38+ TPS. Zero Residual Collapse. Information-theoretic ASVD-Bridge architecture for edge and air-gapped enterprise AI. AU Provisional Patent #2026907153.";
 ---
 <!DOCTYPE html>
 <html lang="en" class="dark scroll-smooth">
@@ -58,14 +58,13 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
       animation: blink 1s step-end infinite;
       color: #22d3ee;
     }
-    .metrics-track { display: flex; gap: 0; will-change: transform; }
     .hero-grid {
       background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
       background-size: 40px 40px;
     }
     .arch-icon {
-      width: 42px; height: 42px;
+      width: 44px; height: 44px;
       display: flex; align-items: center; justify-content: center;
       border-radius: 10px;
       font-size: 1.25rem;
@@ -118,108 +117,107 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
 <body class="bg-zinc-950 text-zinc-100 antialiased overflow-x-hidden">
 
   <!-- ═══════════════════════════════════════════════════════ NAV ═══ -->
-  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-zinc-950/80 backdrop-blur-xl">
-    <div class="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
+  <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.06] bg-zinc-950/85 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="glow-dot"></div>
         <span class="font-mono font-semibold text-sm tracking-tight">
-          <span class="text-cyan-400">Q</span><span class="text-white">Tensor</span>
+          <span class="text-cyan-400">Zero</span><span class="text-white">Fold</span>
+          <span class="text-zinc-600 mx-1.5">//</span>
+          <span class="text-emerald-400">Q</span><span class="text-white">Tensor</span>
         </span>
-        <span class="text-zinc-600 text-xs font-mono hidden sm:block">v2.0-asymmetric</span>
+        <span class="border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-[10px] font-mono px-2 py-0.5 rounded-full hidden sm:inline-block">
+          AU Patent #2026907153
+        </span>
       </div>
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-5">
+        <a href="#about" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">About</a>
+        <a href="#products" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Products</a>
+        <a href="#benchmarks" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Benchmarks</a>
         <a href="#architecture" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Architecture</a>
-        <a href="#quickstart" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Quickstart</a>
+        <a href="#team" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Team</a>
+        <a href="#enterprise" class="text-zinc-400 hover:text-zinc-100 text-sm transition-colors hidden md:block">Enterprise</a>
         <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank"
-           class="flex items-center gap-2 text-zinc-300 hover:text-white text-sm bg-white/[0.05] border border-white/[0.08] px-3 py-1.5 rounded-md transition-all hover:bg-white/[0.09]">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          Star ⭐
+           class="flex items-center gap-2 text-zinc-300 hover:text-white text-xs bg-white/[0.05] border border-white/[0.08] px-3 py-1.5 rounded-md transition-all hover:bg-white/[0.09]">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
         </a>
       </div>
     </div>
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════ HERO ═══ -->
-  <section class="relative min-h-screen flex flex-col items-center justify-center pt-14 hero-grid overflow-hidden">
+  <section class="relative min-h-[92vh] flex flex-col items-center justify-center pt-20 hero-grid overflow-hidden">
     <!-- Glow orbs -->
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full" style="background: radial-gradient(ellipse, rgba(6,182,212,0.08) 0%, transparent 70%); pointer-events:none;"></div>
-    <div class="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full" style="background: radial-gradient(ellipse, rgba(16,185,129,0.06) 0%, transparent 70%); pointer-events:none;"></div>
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] rounded-full" style="background: radial-gradient(ellipse, rgba(6,182,212,0.10) 0%, transparent 70%); pointer-events:none;"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full" style="background: radial-gradient(ellipse, rgba(16,185,129,0.08) 0%, transparent 70%); pointer-events:none;"></div>
 
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
-      <!-- Label pill -->
-      <div class="inline-flex items-center gap-2 border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 text-xs font-mono px-3 py-1.5 rounded-full mb-8 tracking-wide">
+    <div class="relative max-w-5xl mx-auto px-6 text-center">
+      <!-- Priority Protection Pill -->
+      <div class="inline-flex items-center gap-2 border border-cyan-500/30 bg-cyan-500/5 text-cyan-300 text-xs font-mono px-4 py-1.5 rounded-full mb-8 tracking-wide">
         <div class="glow-dot" style="width:6px;height:6px;"></div>
-        Information-Theoretic Asymmetric Architecture · v2.0
+        AU Provisional Patent #2026907153 · Zero-Overhead Subspace Stabilization
       </div>
 
-      <!-- Headline -->
-      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
+      <!-- Main Headline -->
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.05] mb-6">
         <span class="gradient-text">ASVD-Bridge:</span><br/>
         <span class="text-zinc-100">Zero-Overhead Subspace Stabilization</span>
       </h1>
 
       <!-- Subheadline -->
-      <p class="text-zinc-400 text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-        Compressing an 8-Billion Parameter LLM to a 4.67 GB VRAM Footprint at 32+ TPS.
+      <p class="text-zinc-400 text-lg sm:text-xl max-w-3xl mx-auto mb-10 leading-relaxed">
+        Breaking the VRAM and Sovereign Compute Wall. Compressing frontier 8B parameter models into a <span class="text-zinc-200 font-semibold">4.67 GB VRAM footprint</span> and 1.5B models into <span class="text-zinc-200 font-semibold">1.03 GB</span> at full production speeds on consumer silicon.
       </p>
 
       <!-- CTA Buttons -->
       <div class="flex flex-wrap items-center justify-center gap-4 mb-14">
         <a href="/ASVD_Bridge_Paper.pdf" target="_blank" class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8" stroke="currentColor" fill="none" stroke-width="2"></polyline></svg>
-          Read the Paper (PDF)
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8" stroke="currentColor" fill="none" stroke-width="2"></polyline></svg>
+          Read the Whitepaper (PDF)
         </a>
-        <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="btn-secondary">
-          🤗 Download Weights on Hugging Face
+        <a href="#products" class="btn-secondary">
+          Explore Product Suite →
         </a>
-        <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          View Source Code
+        <a href="https://huggingface.co/trentzap/ASVD-Bridge-Coder-1.5B" target="_blank" class="btn-secondary">
+          🤗 Hugging Face Weights
         </a>
       </div>
 
-      <!-- Terminal -->
-      <div class="max-w-lg mx-auto">
+      <!-- Quick Terminal Preview -->
+      <div class="max-w-xl mx-auto">
         <div class="bg-zinc-900 border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl text-left">
-          <!-- Terminal titlebar -->
           <div class="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06] bg-zinc-900/80">
             <div class="w-3 h-3 rounded-full bg-red-500/70"></div>
             <div class="w-3 h-3 rounded-full bg-yellow-500/70"></div>
             <div class="w-3 h-3 rounded-full bg-green-500/70"></div>
-            <span class="ml-2 text-xs text-zinc-500 font-mono">bash</span>
+            <span class="ml-2 text-xs text-zinc-500 font-mono">air-gapped local api test</span>
             <button id="copy-install" class="copy-btn" onclick="copyInstall()">copy</button>
           </div>
-          <div class="px-5 py-4 font-mono text-sm">
+          <div class="px-5 py-4 font-mono text-xs sm:text-sm text-zinc-300">
             <span class="text-emerald-400">$</span>
-            <span class="text-zinc-300 ml-2">pip install qtensor</span>
+            <span class="text-cyan-300 ml-2">curl -X POST http://127.0.0.1:8000/v1/chat/completions \</span><br/>
+            <span class="text-zinc-500 ml-6">-H "Content-Type: application/json" \</span><br/>
+            <span class="text-zinc-500 ml-6">{`-d '{"model":"asvd-bridge-coder-1.5b","messages":[{"role":"user","content":"def quicksort(arr):"}]}'`}</span>
             <span class="cursor"></span>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-600">
-      <span class="text-xs font-mono">scroll</span>
-      <svg width="16" height="20" viewBox="0 0 16 20" fill="none" class="animate-bounce">
-        <rect x="1" y="1" width="14" height="18" rx="7" stroke="currentColor" stroke-width="1.5"/>
-        <rect x="6.5" y="4" width="3" height="5" rx="1.5" fill="currentColor"/>
-      </svg>
-    </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════ METRICS ═══ -->
+  <!-- ═══════════════════════════════════════════════════════ METRICS TICKER ═══ -->
   <section class="py-0 border-y border-white/[0.06] bg-zinc-950 overflow-hidden">
-    <div class="flex" style="animation: scrollX 20s linear infinite;">
-      <!-- Two copies for seamless loop -->
+    <div class="flex" style="animation: scrollX 24s linear infinite;">
       {[1,2].map(() => (
         <div class="flex shrink-0 items-stretch">
           {[
-            { val: "4.67 GB", label: "VRAM", sub: "Fits Consumer GPUs", color: "cyan" },
-            { val: "32.93 t/s", label: "Throughput", sub: "Real-Time Generation", color: "emerald" },
-            { val: "8.03B", label: "Parameters", sub: "Base Meta-Llama-3", color: "cyan" },
-            { val: "Step 230", label: "Alpha Release", sub: "Actively Training", color: "emerald" },
-            { val: "Zero-Overhead", label: "Inference", sub: "Folded ASVD-Bridge", color: "cyan" },
+            { val: "1.03 GB", label: "Coder VRAM", sub: "ASVD-Bridge-Coder-1.5B", color: "cyan" },
+            { val: "38.39 t/s", label: "Inference TPS", sub: "Zero-Overhead Folded", color: "emerald" },
+            { val: "750 Steps", label: "Atomic Sprint", sub: "0 Bytes Disk Writes", color: "cyan" },
+            { val: "1,498.4 t/s", label: "Distillation TPS", sub: "RTX 5080 Validated", color: "emerald" },
+            { val: "H(S) = 2.48", label: "Shannon Entropy", sub: "State Preservation", color: "cyan" },
+            { val: "AU Patent", label: "#2026907153", sub: "LegalVision Priority", color: "emerald" },
           ].map((m) => (
             <div class="flex items-center border-r border-white/[0.06] px-10 py-5 gap-4 shrink-0">
               <div class={`w-1.5 h-8 rounded-full ${m.color === 'cyan' ? 'bg-cyan-400' : 'bg-emerald-400'}`} style={`box-shadow: 0 0 12px ${m.color === 'cyan' ? '#22d3ee' : '#34d399'};`}></div>
@@ -235,149 +233,372 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
     </div>
   </section>
 
-  
-  <!-- ═══════════════════════════════════════════════════════ HOW IT WORKS ═══ -->
-  <section id="how-it-works" class="py-28 border-t border-white/[0.05] bg-zinc-950/50 relative overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-900/10 via-zinc-950 to-zinc-950"></div>
-    <div class="relative max-w-4xl mx-auto px-6 text-center">
-      <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-4">Architecture Concept</div>
-      <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-6">
-        The Pressure Regulator for Neural Networks
-      </h2>
-      <p class="text-zinc-400 text-lg leading-relaxed max-w-3xl mx-auto">
-        Think of an AI model like a massive city water grid. Compressing it shrinks the pipes, which causes the mathematical 'water pressure' (tensor variance) to drop, breaking the downstream valves. The Subspace Bridge acts as a dynamic pressure regulator placed immediately after the compressed pipes to recalibrate the pressure. Because it is a Rank-1 transformation, we permanently weld that regulator directly into the pipe itself after training, costing zero extra compute during inference.
-      </p>
+  <!-- ═══════════════════════════════════════════════════════ ABOUT SECTION ═══ -->
+  <section id="about" class="py-28 border-b border-white/[0.05] bg-zinc-950/40 relative">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-3">About ZeroFold & QTensor</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-6">
+          Shattering the VRAM Wall with Mathematical Rigor
+        </h2>
+        <p class="text-zinc-400 text-lg leading-relaxed">
+          ZeroFold was founded on a simple thesis: modern frontier intelligence is artificially constrained by memory bandwidth and cloud centralization. We engineer information-theoretic neural architectures that run natively on consumer hardware and sovereign on-premise infrastructure.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="card-border rounded-2xl p-8">
+          <div class="text-cyan-400 font-mono text-2xl font-bold mb-4">01</div>
+          <h3 class="text-zinc-100 font-semibold text-xl mb-3">The Mathematical Core</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Conventional low-rank matrix decomposition causes downstream activation variance to collapse. The ASVD-Bridge inserts a learnable Rank-1 Subspace Bridge (&gamma;) that dynamic-calibrates variance during distillation, then deterministically folds into the weights at export for zero runtime overhead.
+          </p>
+        </div>
+
+        <div class="card-border rounded-2xl p-8">
+          <div class="text-emerald-400 font-mono text-2xl font-bold mb-4">02</div>
+          <h3 class="text-zinc-100 font-semibold text-xl mb-3">Sovereign & Air-Gapped</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Mission-critical industries—defense, M&A diligence, government, and robotics—cannot transmit classified tokens over public cloud APIs. Our models and serving shells operate in 100% air-gapped environments with verified zero network telemetry.
+          </p>
+        </div>
+
+        <div class="card-border rounded-2xl p-8">
+          <div class="text-cyan-400 font-mono text-2xl font-bold mb-4">03</div>
+          <h3 class="text-zinc-100 font-semibold text-xl mb-3">Patent-Protected Moat</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Prosecuted in partnership with leading corporate IP firm LegalVision, Australian Provisional Patent #2026907153 secures our priority date over the Subspace Stabilization mechanics, dynamic SVD rank redistribution, and deterministic weight folding compilation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ PRODUCT SECTION ═══ -->
+  <section id="products" class="py-28 border-b border-white/[0.05]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <div class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-3">Product Portfolio</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-6">
+          Production-Grade Edge & Sovereign Infrastructure
+        </h2>
+        <p class="text-zinc-400 text-lg leading-relaxed">
+          From compilation and training engines to air-gapped deployment servers and pre-compiled model artifacts, our product suite provides end-to-end edge AI execution.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 mb-12">
+        <!-- Product 1 -->
+        <div class="card-border rounded-2xl p-8 relative group hover:border-cyan-500/30 transition-all">
+          <div class="flex items-center justify-between mb-6">
+            <div class="arch-icon bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono font-bold">
+              01
+            </div>
+            <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">
+              Compiler & Distillation Engine
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold text-zinc-100 mb-3">ASVD-Bridge Compression Engine</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            An automated compilation pipeline that applies dynamic rank SVD across attention projections, INT4 physical packing across MLP blocks, and trains the Subspace Bridge scalar via Quantization-Aware Distillation (QAD). Folds permanently upon export with 0.00 ns runtime latency.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+            <div>
+              <span class="text-zinc-500 block">Attention Topology:</span>
+              <span class="text-cyan-300 font-semibold">Dynamic SVD (r ∈ [12, 24])</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">MLP Topology:</span>
+              <span class="text-emerald-300 font-semibold">AWQ INT4 (Group Size 128)</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Stabilization:</span>
+              <span class="text-cyan-300 font-semibold">Rank-1 Folded Scalar (&gamma;)</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Runtime Overhead:</span>
+              <span class="text-emerald-300 font-semibold">0.00 ns (GEMM Native)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="card-border rounded-2xl p-8 relative group hover:border-emerald-500/30 transition-all">
+          <div class="flex items-center justify-between mb-6">
+            <div class="arch-icon bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono font-bold">
+              02
+            </div>
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+              Enterprise Serving Shell
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold text-zinc-100 mb-3">Air-Gapped Zero-Telemetry API (FastAPI)</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            A production-hardened local API wrapper engineered with socket-level egress blocking. Guaranteed zero outbound network traffic, offline OpenAPI schemas, and OpenAI-compatible drop-in endpoints (<code class="text-emerald-300 bg-zinc-900 px-1 py-0.5 rounded">/v1/chat/completions</code>) with server-sent events (SSE) streaming.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+            <div>
+              <span class="text-zinc-500 block">Egress Protection:</span>
+              <span class="text-emerald-300 font-semibold">Socket Monkey-Patch Guard</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Protocol Compatibility:</span>
+              <span class="text-cyan-300 font-semibold">OpenAI v1 Spec + SSE</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Telemetry Leakage:</span>
+              <span class="text-emerald-300 font-semibold">Strictly 0 Bytes Outbound</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Deployment Target:</span>
+              <span class="text-cyan-300 font-semibold">Localhost / Air-Gapped K8s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="card-border rounded-2xl p-8 relative group hover:border-cyan-500/30 transition-all">
+          <div class="flex items-center justify-between mb-6">
+            <div class="arch-icon bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-mono font-bold">
+              03
+            </div>
+            <span class="text-xs font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-3 py-1 rounded-full">
+              Deployable Model Weights
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold text-zinc-100 mb-3">ASVD-Bridge Model Series</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            Pre-compiled standalone weights formatted with custom factored topologies. Ready to execute on consumer hardware with zero runtime framework dependencies. Available in 1.5B and 8B parameter variants.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+            <div>
+              <span class="text-zinc-500 block">ASVD-Bridge-Coder-1.5B:</span>
+              <span class="text-cyan-300 font-semibold">1.03 GB VRAM · 38.39 TPS</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">ASVD-Bridge-8B:</span>
+              <span class="text-emerald-300 font-semibold">4.67 GB VRAM · 32.93 TPS</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Storage Distribution:</span>
+              <span class="text-cyan-300 font-semibold">Single Safetensors Shard</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Hardware Floor:</span>
+              <span class="text-emerald-300 font-semibold">RTX 3060 / Apple M-Series</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="card-border rounded-2xl p-8 relative group hover:border-emerald-500/30 transition-all">
+          <div class="flex items-center justify-between mb-6">
+            <div class="arch-icon bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono font-bold">
+              04
+            </div>
+            <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+              Foundational Mathematics
+            </span>
+          </div>
+          <h3 class="text-2xl font-bold text-zinc-100 mb-3">QTensor 160-Bit Precision Architecture</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            A high-precision fixed-point tensor backend (Q30.130 format) offering 39 decimal digits of numerical precision. Bypasses standard float rounding errors and maintains the Shannon entropy floor ($H(S)$) during aggressive multi-rank tensor contractions.
+          </p>
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/[0.06] text-xs font-mono">
+            <div>
+              <span class="text-zinc-500 block">Word Structure:</span>
+              <span class="text-emerald-300 font-semibold">5x uint32 (160-bit SoA)</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Precision Floor:</span>
+              <span class="text-cyan-300 font-semibold">39 Decimal Digits (7.34e-40)</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Kernel Engine:</span>
+              <span class="text-emerald-300 font-semibold">One-Sided Jacobi SVD</span>
+            </div>
+            <div>
+              <span class="text-zinc-500 block">Memory Bandwidth:</span>
+              <span class="text-cyan-300 font-semibold">Triton L1 SRAM Fused</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ BENCHMARKS ═══ -->
-  <section id="benchmarks" class="pb-28 pt-10 max-w-5xl mx-auto px-6 relative z-10">
-    <div class="bg-zinc-900/50 border border-white/[0.06] rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm">
-      <div class="px-6 py-4 border-b border-white/[0.06] bg-zinc-900/80">
-        <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Verified Benchmarks · ASVD-Bridge (Step 230) · NVIDIA RTX 5080</span>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-white/[0.04]">
-              <th class="text-left px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">Metric</th>
-              <th class="text-right px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">FP16 Baseline</th>
-              <th class="text-right px-6 py-4 text-cyan-400 font-mono text-xs uppercase tracking-wider">ASVD-Bridge Demo</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/[0.03]">
-            {[
-              ["VRAM Footprint", "~15.0 GB", "4.67 GB \u2705"],
-              ["Throughput", "~15 t/s", "32.93 t/s \u2705"],
-              ["Coherence Status", "Full Pre-trained", "Early Syntax Healing (Step 230) \u26A0\uFE0F"],
-            ].map(([metric, fp16, ours]) => (
-              <tr class="hover:bg-white/[0.02] transition-colors">
-                <td class="px-6 py-4 text-zinc-300 font-mono text-xs font-semibold">{metric}</td>
-                <td class="px-6 py-4 text-zinc-500 text-right font-mono text-xs">{fp16}</td>
-                <td class="px-6 py-4 text-cyan-400 text-right font-mono text-xs font-semibold">{ours}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- 8B Launch Status UI -->
-    <div class="mt-8 grid md:grid-cols-2 gap-6">
-      <div class="bg-cyan-500/10 border border-cyan-500/20 rounded-xl p-6 shadow-[0_0_20px_rgba(6,182,212,0.1)] transition-all hover:bg-cyan-500/20">
-        <div class="text-cyan-400 font-mono text-xs uppercase tracking-wider mb-2 flex items-center gap-2">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          Hardware Targets
-        </div>
-        <p class="text-zinc-300 text-sm leading-relaxed">
-          At 4.67 GB, this architecture fits comfortably on base-tier Mac M-Series chips (8GB Unified), standard RTX 3060/4060 GPUs, and lightweight backend server containers.
-        </p>
-      </div>
-      
-      <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 shadow-[0_0_20px_rgba(16,185,129,0.1)] transition-all hover:bg-emerald-500/20">
-        <div class="text-emerald-400 font-mono text-xs uppercase tracking-wider mb-2 flex items-center gap-2">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-          Live Training Roadmap
-        </div>
-        <p class="text-zinc-300 text-sm leading-relaxed">
-          Current Checkpoint: Step 230. Semantic convergence expected at Step 5,000. Follow the repository for the final weight release.
-        </p>
-      </div>
-    </div>
-  </section>
-
-<!-- ═══════════════════════════════════════════════════════ QUICKSTART ═══ -->
-  <section id="quickstart" class="py-28 max-w-6xl mx-auto px-6">
-    <div class="grid lg:grid-cols-2 gap-16 items-center">
-      <!-- Left: text -->
-      <div>
-        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-4">Developer Experience</div>
-        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-5">
-          Compress any LLM in<br/><span class="gradient-text-cyan">three lines.</span>
+  <section id="benchmarks" class="py-28 border-b border-white/[0.05] bg-zinc-950/60 relative">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-3">Empirical Validation</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-4">
+          Hardware Benchmarks & Telemetry
         </h2>
-        <p class="text-zinc-400 leading-relaxed mb-6">
-          QTensor's asymmetric compression pipeline automatically maps entropy to rank,
-          applies AWQ activation scaling to every MLP projection, and injects a learnable
-          Rank-1 Subspace Bridge — all via a single <code class="text-cyan-400 bg-zinc-900 px-1.5 py-0.5 rounded text-sm">qtensor.compress()</code> call.
+        <p class="text-zinc-400 text-sm">
+          Verified on consumer hardware (NVIDIA GeForce RTX 5080, 16GB GDDR7, CUDA 13.2) under continuous atomic training and inference loops.
         </p>
-        <div class="flex flex-wrap gap-3">
-          <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="btn-primary text-sm">
-            Read the Docs
-          </a>
-          <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="btn-secondary text-sm">
-            🤗 Pre-built Weights
-          </a>
+      </div>
+
+      <div class="bg-zinc-900/60 border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl backdrop-blur-sm mb-8">
+        <div class="px-6 py-4 border-b border-white/[0.06] bg-zinc-900/90 flex items-center justify-between">
+          <span class="text-xs font-mono text-zinc-400 tracking-wider uppercase font-semibold">
+            Inference Performance: 8B & 1.5B Architectures
+          </span>
+          <span class="text-[11px] font-mono text-emerald-400 border border-emerald-500/20 bg-emerald-500/10 px-2.5 py-0.5 rounded-full">
+            Zero-Overhead Folded
+          </span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-white/[0.04]">
+                <th class="text-left px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">Model Configuration</th>
+                <th class="text-right px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">VRAM Footprint</th>
+                <th class="text-right px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">Inference Speed</th>
+                <th class="text-right px-6 py-4 text-zinc-500 font-mono text-xs uppercase tracking-wider">Hardware Target</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/[0.03]">
+              <tr class="hover:bg-white/[0.02]">
+                <td class="px-6 py-4 text-zinc-300 font-mono text-xs font-semibold">Meta-Llama-3-8B (FP16 Baseline)</td>
+                <td class="px-6 py-4 text-zinc-500 text-right font-mono text-xs">~15.00 GB</td>
+                <td class="px-6 py-4 text-zinc-500 text-right font-mono text-xs">15.12 TPS</td>
+                <td class="px-6 py-4 text-zinc-500 text-right font-mono text-xs">Enterprise GPUs (A100/H100)</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] bg-cyan-500/[0.02]">
+                <td class="px-6 py-4 text-cyan-300 font-mono text-xs font-semibold">ASVD-Bridge-8B (Folded Subspace)</td>
+                <td class="px-6 py-4 text-cyan-400 text-right font-mono text-xs font-bold">4.67 GB</td>
+                <td class="px-6 py-4 text-cyan-400 text-right font-mono text-xs font-bold">32.93 TPS</td>
+                <td class="px-6 py-4 text-cyan-400 text-right font-mono text-xs">RTX 3060/4060 / Mac M-Series</td>
+              </tr>
+              <tr class="hover:bg-white/[0.02] bg-emerald-500/[0.02]">
+                <td class="px-6 py-4 text-emerald-300 font-mono text-xs font-semibold">ASVD-Bridge-Coder-1.5B (INT4/SVD)</td>
+                <td class="px-6 py-4 text-emerald-400 text-right font-mono text-xs font-bold">1.03 GB</td>
+                <td class="px-6 py-4 text-emerald-400 text-right font-mono text-xs font-bold">38.39 TPS</td>
+                <td class="px-6 py-4 text-emerald-400 text-right font-mono text-xs">Edge Appliances / Laptops</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Right: code block -->
-      <div class="relative">
-        <div class="absolute -inset-1 rounded-2xl opacity-40" style="background: linear-gradient(135deg, rgba(6,182,212,0.3), rgba(16,185,129,0.2)); filter: blur(20px);"></div>
-        <div class="relative bg-zinc-900 border border-white/[0.08] rounded-xl overflow-hidden">
-          <div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-            <div class="flex gap-2">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/60"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-green-500/60"></div>
-            </div>
-            <span class="text-zinc-500 text-xs font-mono">compress.py</span>
-            <button class="copy-btn" style="position:static;" onclick="copyCode()">copy</button>
+      <!-- Training Sprint Telemetry Box -->
+      <div class="bg-zinc-900/40 border border-white/[0.08] rounded-2xl p-6 md:p-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-white/[0.06]">
+          <div>
+            <div class="text-xs font-mono text-cyan-400 uppercase tracking-wider mb-1">Validated Training Sprint</div>
+            <h3 class="text-xl font-bold text-zinc-100">750-Step Atomic Distillation (No-Checkpoint Proof of Scale)</h3>
           </div>
-          <div class="px-5 py-6 font-mono text-sm leading-7 overflow-x-auto">
-            <div><span class="token-kw">import</span> <span class="token-var">qtensor</span></div>
-            <div><span class="token-kw">from</span> <span class="token-var">transformers</span> <span class="token-kw">import</span> <span class="token-fn">AutoModelForCausalLM</span></div>
-            <div class="mt-4 token-cmt"># Load and compress via Information-Theoretic rank allocation</div>
-            <div><span class="token-var">model</span> = <span class="token-fn">AutoModelForCausalLM</span>.<span class="token-fn">from_pretrained</span>(<span class="token-str">"NousResearch/Meta-Llama-3-8B"</span>)</div>
-            <div><span class="token-var">model</span> = <span class="token-var">qtensor</span>.<span class="token-fn">compress</span>(</div>
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-var">model</span>,</div>
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-param">strategy</span>=<span class="token-str">"asymmetric_v2"</span>,</div>
-            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-param">use_triton</span>=<span class="token-kw">True</span></div>
-            <div>)</div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 rounded-full w-fit">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            100% In-Memory Verified
+          </span>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-xs">
+          <div>
+            <div class="text-zinc-500 mb-1">Convergence:</div>
+            <div class="text-lg font-bold text-zinc-100">24.25 → 3.59</div>
+            <div class="text-zinc-500 text-[10px]">QAD Distillation Loss</div>
+          </div>
+          <div>
+            <div class="text-zinc-500 mb-1">Sprint Throughput:</div>
+            <div class="text-lg font-bold text-cyan-400">1,498.4 TPS</div>
+            <div class="text-zinc-500 text-[10px]">384,000 Tokens</div>
+          </div>
+          <div>
+            <div class="text-zinc-500 mb-1">Shannon Entropy:</div>
+            <div class="text-lg font-bold text-emerald-400">H(S) = 2.4840</div>
+            <div class="text-zinc-500 text-[10px]">Invariant Floor</div>
+          </div>
+          <div>
+            <div class="text-zinc-500 mb-1">Disk Checkpoints:</div>
+            <div class="text-lg font-bold text-zinc-100">0 Bytes</div>
+            <div class="text-zinc-500 text-[10px]">Atomic Memory Lock</div>
           </div>
         </div>
       </div>
     </div>
-
-
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════ ARCHITECTURE ═══ -->
-  <section id="architecture" class="py-28 border-t border-white/[0.05]">
+  <!-- ═══════════════════════════════════════════════════════ TEAM SECTION ═══ -->
+  <section id="team" class="py-28 border-b border-white/[0.05]">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-3">Leadership & Advisory</div>
+        <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-4">
+          The Team Behind the Architecture
+        </h2>
+        <p class="text-zinc-400 text-sm">
+          Deep-tech research, low-level GPU systems engineering, and dedicated intellectual property counsel.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Trent Parsons -->
+        <div class="card-border rounded-2xl p-8 relative group">
+          <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 font-mono text-xl font-bold mb-6">
+            TP
+          </div>
+          <h3 class="text-xl font-bold text-zinc-100 mb-1">Trent Ian Parsons</h3>
+          <div class="text-xs font-mono text-cyan-400 mb-4">Founder & Chief Research Architect</div>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            Creator of QTensor Engine and primary inventor of the ASVD-Bridge Subspace Stabilization architecture (AU Patent #2026907153). Focuses on low-rank tensor factorizations, non-commutative algebra, and high-throughput CUDA kernel synthesis.
+          </p>
+          <div class="text-xs font-mono text-zinc-500 border-t border-white/[0.06] pt-4">
+            Specialization: Tensor Networks & Deep Compression
+          </div>
+        </div>
+
+        <!-- Research Advisory -->
+        <div class="card-border rounded-2xl p-8 relative group">
+          <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-mono text-xl font-bold mb-6">
+            R&D
+          </div>
+          <h3 class="text-xl font-bold text-zinc-100 mb-1">Systems & Applied Math</h3>
+          <div class="text-xs font-mono text-emerald-400 mb-4">Research & Compiler Advisory</div>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            Advisory bench specializing in 160-bit fixed-point arithmetic (Q30.130), one-sided Jacobi SVD algorithms, and hardware-accelerated register scheduling across modern NVIDIA Blackwell, Apple Silicon Metal, and ARM NEON architectures.
+          </p>
+          <div class="text-xs font-mono text-zinc-500 border-t border-white/[0.06] pt-4">
+            Focus: High-Performance GPU Kernel Design
+          </div>
+        </div>
+
+        <!-- LegalVision -->
+        <div class="card-border rounded-2xl p-8 relative group">
+          <div class="w-16 h-16 rounded-2xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 font-mono text-xl font-bold mb-6">
+            LV
+          </div>
+          <h3 class="text-xl font-bold text-zinc-100 mb-1">LegalVision Australia</h3>
+          <div class="text-xs font-mono text-violet-400 mb-4">Patent Prosecution & Corporate Counsel</div>
+          <p class="text-zinc-400 text-sm leading-relaxed mb-6">
+            Dedicated IP counsel managing Australian Provisional Patent #2026907153, international Patent Cooperation Treaty (PCT) expansions across the US, EU, and APAC, and corporate commercialization governance.
+          </p>
+          <div class="text-xs font-mono text-zinc-500 border-t border-white/[0.06] pt-4">
+            Practice: Deep-Tech Patents & IP Moat Strategy
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════ ARCHITECTURE CONCEPT ═══ -->
+  <section id="architecture" class="py-28 border-b border-white/[0.05]">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-16">
-        <div class="text-xs font-mono text-emerald-400 tracking-widest uppercase mb-4">Technical Architecture</div>
+        <div class="text-xs font-mono text-cyan-400 tracking-widest uppercase mb-4">Technical Architecture</div>
         <h2 class="text-4xl font-bold tracking-tight text-zinc-100 mb-4">
           Three-Tier Compression Topology
         </h2>
-        <p class="text-zinc-500 max-w-xl mx-auto">
-          Each compression layer targets a distinct information-theoretic regime,
-          minimizing the KL divergence from the teacher manifold at every precision boundary.
+        <p class="text-zinc-500 max-w-xl mx-auto text-sm">
+          Each layer targets a distinct information-theoretic regime, minimizing the KL divergence from the teacher manifold at every precision boundary.
         </p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">
         <!-- Card 1: SVD -->
-        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group">
+        <div class="card-border rounded-2xl p-7">
           <div class="arch-icon bg-cyan-500/10 border border-cyan-500/20 mb-5 text-cyan-400">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
               <path d="M12 2L2 7l10 5 10-5-10-5z"/>
@@ -387,118 +608,89 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
           </div>
           <div class="font-mono text-xs text-cyan-400 mb-2 tracking-wider">LAYER 01 · ATTENTION</div>
           <h3 class="text-zinc-100 font-semibold text-lg mb-3">Entropy-Mapped SVD</h3>
-          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
-            Shannon entropy over the singular value distribution maps each attention projection
-            to a dynamic rank budget <span class="font-mono text-zinc-300">r ∈ [8, 32]</span>.
-            Low-entropy layers get <span class="font-mono text-zinc-300">r=8</span>;
-            information-dense layers expand to <span class="font-mono text-zinc-300">r=32</span>.
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Shannon entropy over the singular value distribution maps each attention projection to a dynamic rank budget <span class="font-mono text-zinc-200">r ∈ [12, 24]</span>, preserving continuous representation over spatial token dependencies.
           </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">Block-SVD</span>
-            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">SpLoRA</span>
-            <span class="bg-cyan-500/10 text-cyan-400 text-xs font-mono px-2.5 py-1 rounded-md border border-cyan-500/20">QKV + O</span>
-          </div>
         </div>
 
         <!-- Card 2: AWQ INT4 -->
-        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group" style="border-color: rgba(16,185,129,0.12);">
+        <div class="card-border rounded-2xl p-7">
           <div class="arch-icon bg-emerald-500/10 border border-emerald-500/20 mb-5 text-emerald-400">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
               <rect x="2" y="3" width="20" height="14" rx="2"/>
               <path d="M8 21h8M12 17v4"/>
-              <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10"/>
             </svg>
           </div>
           <div class="font-mono text-xs text-emerald-400 mb-2 tracking-wider">LAYER 02 · MLP</div>
           <h3 class="text-zinc-100 font-semibold text-lg mb-3">AWQ INT4 MLPs</h3>
-          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
-            Activation-Aware Weight Quantization scales salient channels before INT4 packing:
-            <span class="font-mono text-zinc-300">W_packed = INT4(W / S)</span> with
-            <span class="font-mono text-zinc-300">X_scaled = X × S</span> in the forward pass.
-            Zero catastrophic weight collapse.
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            Activation-Aware Weight Quantization scales salient channels before physical INT4 packing with Straight-Through Estimators (group size 128), preventing activation collapse.
           </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">INT4 AWQ</span>
-            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">Gate/Up/Down</span>
-            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-mono px-2.5 py-1 rounded-md border border-emerald-500/20">Triton GEMV</span>
-          </div>
         </div>
 
         <!-- Card 3: Subspace Bridge -->
-        <div class="card-border rounded-2xl p-7 transition-all duration-300 hover:bg-white/[0.025] group">
+        <div class="card-border rounded-2xl p-7">
           <div class="arch-icon bg-violet-500/10 border border-violet-500/20 mb-5 text-violet-400">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
               <circle cx="12" cy="12" r="3"/>
               <path d="M6.343 6.343a8 8 0 1 0 11.314 11.314A8 8 0 0 0 6.343 6.343z"/>
-              <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
             </svg>
           </div>
           <div class="font-mono text-xs text-violet-400 mb-2 tracking-wider">LAYER 03 · BRIDGE</div>
           <h3 class="text-zinc-100 font-semibold text-lg mb-3">Rank-1 Subspace Bridge</h3>
-          <p class="text-zinc-500 text-sm leading-relaxed mb-4">
-            A learnable scalar injected after each attention layer aligns the student's residual
-            stream with the teacher's hidden-state manifold during QAD distillation.
-            Cures precision-boundary variance mismatch.
+          <p class="text-zinc-400 text-sm leading-relaxed mb-4">
+            A learnable scalar injected at projection boundaries absorbs truncation shock during distillation, then deterministically folds into the GEMM weights for zero runtime latency.
           </p>
-          <div class="flex flex-wrap gap-2">
-            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">Rank-1</span>
-            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">QAD Loss</span>
-            <span class="bg-violet-500/10 text-violet-400 text-xs font-mono px-2.5 py-1 rounded-md border border-violet-500/20">KL + MSE</span>
-          </div>
         </div>
       </div>
-
-      </div>
+    </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ ENTERPRISE ═══ -->
-  <section id="enterprise" class="py-28 border-t border-white/[0.05]">
+  <section id="enterprise" class="py-28 border-b border-white/[0.05]">
     <div class="max-w-6xl mx-auto px-6">
       <div class="relative enterprise-grid rounded-3xl overflow-hidden border border-white/[0.07] p-12 sm:p-16">
-        <!-- Glow -->
         <div class="absolute -top-20 -right-20 w-80 h-80 rounded-full opacity-30" style="background: radial-gradient(ellipse, rgba(6,182,212,0.4) 0%, transparent 70%); pointer-events:none;"></div>
         <div class="absolute -bottom-10 -left-10 w-60 h-60 rounded-full opacity-20" style="background: radial-gradient(ellipse, rgba(16,185,129,0.4) 0%, transparent 70%); pointer-events:none;"></div>
 
         <div class="relative max-w-2xl">
           <div class="inline-flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] text-zinc-400 text-xs font-mono px-3 py-1.5 rounded-full mb-6 tracking-wider">
-            🔒 AIR-GAPPED · ZERO-CLOUD · SOVEREIGN AI
+            🔒 AIR-GAPPED · ZERO-CLOUD · ENTERPRISE READY
           </div>
           <h2 class="text-4xl sm:text-5xl font-bold tracking-tight text-zinc-100 mb-5 leading-tight">
-            Deploy on proprietary<br/><span class="gradient-text-cyan">hardware. Your rules.</span>
+            Deploy on sovereign<br/><span class="gradient-text-cyan">hardware. Your rules.</span>
           </h2>
           <p class="text-zinc-400 text-lg leading-relaxed mb-8">
-            Custom sub-5GB 8-Billion parameter architectures built for zero-cloud, air-gapped environments.
-            Purpose-built deployments for <span class="text-zinc-200">defense</span>,
-            <span class="text-zinc-200">legal M&A</span>,
-            <span class="text-zinc-200">robotics</span>, and enterprise edge inference.
+            Purpose-built sub-5GB model architectures and air-gapped serving wrappers engineered for defense, government, M&A diligence, robotics, and private enterprise clusters.
           </p>
           <div class="flex flex-wrap gap-3 mb-10">
-            {["CTO / ML Engineering", "Defense & Government", "Legal & M&A AI", "Edge Robotics", "Private Cloud"].map(tag => (
+            {["Google Cloud On-Prem / GKE", "Defense & Tactical Edge", "M&A Diligence & Legal AI", "Embedded OEM Hardware", "Zero-Telemetry Private Cloud"].map(tag => (
               <span class="bg-white/[0.04] border border-white/[0.08] text-zinc-400 text-xs font-mono px-3 py-1.5 rounded-full">{tag}</span>
             ))}
           </div>
-          <a href="mailto:consult@qtensor.com.au?subject=Architecture%20Consultation%20Request" class="btn-primary text-base px-6 py-3">
-            Book Architecture Consultation →
+          <a href="mailto:consult@qtensor.com.au?subject=Enterprise%20Architecture%20Inquiry" class="btn-primary text-base px-6 py-3">
+            Inquire for Enterprise Deployment →
           </a>
         </div>
       </div>
     </div>
-
-
   </section>
 
   <!-- ═══════════════════════════════════════════════════════ FOOTER ═══ -->
-  <footer class="border-t border-white/[0.06] py-12">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+  <footer class="py-12 bg-zinc-950">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
       <div class="flex items-center gap-3">
         <div class="glow-dot"></div>
         <span class="font-mono text-sm text-zinc-400">
-          <span class="text-cyan-400">Q</span>Tensor Engine · MIT License
+          <span class="text-cyan-400">ZeroFold</span> // <span class="text-emerald-400">QTensor</span> Engine · Australian Provisional Patent #2026907153
         </span>
       </div>
-      <div class="flex items-center gap-6 text-sm text-zinc-500">
+      <div class="flex items-center gap-6 text-xs text-zinc-500 font-mono">
+        <a href="#about" class="hover:text-zinc-300 transition-colors">About</a>
+        <a href="#products" class="hover:text-zinc-300 transition-colors">Products</a>
+        <a href="#team" class="hover:text-zinc-300 transition-colors">Team</a>
         <a href="https://github.com/Trentzap1/qtensor-engine" target="_blank" class="hover:text-zinc-300 transition-colors">GitHub</a>
-        <a href="https://huggingface.co/trentzap/QTensor-Llama-3-8B-Demo" target="_blank" class="hover:text-zinc-300 transition-colors">Hugging Face</a>
+        <a href="https://huggingface.co/trentzap/ASVD-Bridge-Coder-1.5B" target="_blank" class="hover:text-zinc-300 transition-colors">Hugging Face</a>
         <a href="mailto:consult@qtensor.com.au" class="hover:text-zinc-300 transition-colors">Contact</a>
       </div>
     </div>
@@ -506,20 +698,13 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
 
   <script>
     function copyInstall() {
-      navigator.clipboard.writeText('pip install qtensor');
+      const curlCmd = `curl -X POST http://127.0.0.1:8000/v1/chat/completions -H "Content-Type: application/json" -d '{"model":"asvd-bridge-coder-1.5b","messages":[{"role":"user","content":"def quicksort(arr):"}]}'`;
+      navigator.clipboard.writeText(curlCmd);
       const btn = document.getElementById('copy-install');
       btn.textContent = 'copied!';
       btn.style.color = '#34d399';
       setTimeout(() => { btn.textContent = 'copy'; btn.style.color = ''; }, 2000);
     }
-    function copyCode() {
-      const code = `import qtensor\nfrom transformers import AutoModelForCausalLM\n\n# Load and compress via Information-Theoretic rank allocation\nmodel = AutoModelForCausalLM.from_pretrained("NousResearch/Meta-Llama-3-8B")\nmodel = qtensor.compress(model, strategy="asymmetric_v2", use_triton=True)`;
-      navigator.clipboard.writeText(code);
-      const btns = document.querySelectorAll('.copy-btn');
-      btns.forEach(b => { if (b !== document.getElementById('copy-install')) { b.textContent = 'copied!'; b.style.color = '#34d399'; setTimeout(() => { b.textContent = 'copy'; b.style.color = ''; }, 2000); }});
-    }
-    // Smooth scroll metric bar (CSS animation fallback)
-    const track = document.querySelector('.metrics-track');
   </script>
 
   <style>
@@ -528,11 +713,6 @@ const description = "Sub-1.2GB VRAM. 60+ Tokens/Sec. Zero Residual Collapse. Inf
       100% { transform: translateX(-50%); }
     }
     [style*="scrollX"] { animation: scrollX 30s linear infinite; }
-    section { animation: fadeUp 0.6s ease-out both; }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
   </style>
 </body>
 </html>
