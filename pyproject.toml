@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qtensor-edge"
+version = "1.0.0"
+description = "Client SDK for the QTensor Edge AI Inference Engine"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.40.0",
+]
+
+[project.scripts]
+qtensor = "qtensor.cli:main"

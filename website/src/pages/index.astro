@@ -1,0 +1,1493 @@
+---
+// QTensor - Edge AI Inference Engine
+// ZeroFold Design System: Sophisticated, pragmatic, highly spaced, and outcome-focused.
+---
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QTensor Edge | Deterministic AI Inference Engine</title>
+  <meta name="description" content="QTensor Edge is a deterministic, training-free LLM compression engine. Compile AI models for sub-3GB edge silicon using proprietary fixed-point Triton kernels. Engineered by ZeroFold." />
+
+  <!-- Open Graph / Twitter Meta Tags -->
+  <meta property="og:title" content="QTensor Edge | Deterministic AI Inference Engine" />
+  <meta property="og:description" content="QTensor Edge is a deterministic, training-free LLM compression engine. Compile AI models for sub-3GB edge silicon using proprietary fixed-point Triton kernels. Engineered by ZeroFold." />
+  <meta property="og:url" content="https://qtensor.com.au/" />
+  <meta property="og:site_name" content="QTensor Edge" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QTensor Edge | Deterministic AI Inference Engine" />
+  <meta name="twitter:description" content="QTensor Edge is a deterministic, training-free LLM compression engine. Compile AI models for sub-3GB edge silicon using proprietary fixed-point Triton kernels. Engineered by ZeroFold." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#f5f2ea" />
+  <meta name="color-scheme" content="light" />
+
+  <style>
+    :root {
+      --paper: #f5f2ea;
+      --paper-soft: #faf8f2;
+      --paper-card: #ffffff;
+      --ink: #0b0b0b;
+      --muted: #5b5a55;
+      --muted-light: #8e8d88;
+      --border: rgba(11, 11, 11, 0.12);
+      --border-subtle: rgba(11, 11, 11, 0.06);
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    }
+
+    ::selection {
+      background-color: var(--ink);
+      color: var(--paper);
+    }
+
+    /* Modal Animation */
+    .modal-backdrop {
+      transition: opacity 0.25s ease-out;
+    }
+    .modal-panel {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .modal-hidden .modal-panel {
+      transform: scale(0.96) translateY(8px);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-[#f5f2ea] text-[#0b0b0b] antialiased selection:bg-[#0b0b0b] selection:text-[#f5f2ea]">
+
+  <!-- SITE HEADER -->
+  <header class="sticky top-0 z-40 w-full bg-[#f5f2ea]/90 backdrop-blur-md border-b border-[#0b0b0b]/10 transition-all">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="/" class="text-2xl font-semibold tracking-tight text-[#0b0b0b] hover:opacity-80 transition-opacity">
+          QTensor
+        </a>
+        <a 
+          href="https://zerofold.com.au/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#0b0b0b]/5 text-[#5b5a55] border border-[#0b0b0b]/10 hover:text-[#0b0b0b] hover:border-[#0b0b0b]/25 transition-all"
+        >
+          <span>A ZeroFold Technology</span>
+          <span aria-hidden="true" class="text-[10px]">↗</span>
+        </a>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#5b5a55]">
+        <a href="#baseline" class="hover:text-[#0b0b0b] transition-colors">Baseline</a>
+        <a href="#benchmarks" class="hover:text-[#0b0b0b] transition-colors">Benchmarks</a>
+        <a href="#engine" class="hover:text-[#0b0b0b] transition-colors">The Engine</a>
+        <a href="#simulator" class="hover:text-[#0b0b0b] transition-colors">Simulator</a>
+        <a href="#models" class="hover:text-[#0b0b0b] transition-colors">Models</a>
+        <a href="/contact" class="hover:text-[#0b0b0b] transition-colors">Contact</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a 
+          href="#simulator"
+          class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium border border-[#0b0b0b]/20 text-[#0b0b0b] hover:bg-[#0b0b0b]/5 transition-all"
+        >
+          <span>View Live Telemetry</span>
+          <span aria-hidden="true" class="text-xs">↓</span>
+        </a>
+        <button 
+          type="button"
+          data-modal-open="brief"
+          class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-5 py-2.5 rounded-full text-sm font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95"
+        >
+          <span>Request Evaluation License</span>
+          <span aria-hidden="true" class="text-xs">↗</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. HERO SECTION -->
+    <section class="relative pt-20 pb-28 sm:pt-28 sm:pb-36 lg:pt-36 lg:pb-44 border-b border-[#0b0b0b]/10">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="max-w-4xl">
+          <!-- Eyebrow -->
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium uppercase tracking-wider bg-[#0b0b0b]/5 text-[#5b5a55] border border-[#0b0b0b]/10 mb-6">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>QTensor v2.0 · Subspace Residual Bridging Engine</span>
+          </div>
+
+          <!-- Massive Headline -->
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight text-[#0b0b0b] leading-[1.03]">
+            Edge AI Inference.<br />
+            Compiled analytically.
+          </h1>
+
+          <!-- Subtext -->
+          <p class="mt-8 sm:mt-10 text-xl sm:text-2xl text-[#5b5a55] font-normal leading-relaxed max-w-2xl">
+            Zero-byte disk writes. Zero gradient training epochs. QTensor compresses foundation-class LLMs to sub-3GB edge silicon and consumer GPUs using deterministic linear algebra and subspace residual bridges.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="mt-10 sm:mt-12 flex flex-wrap items-center gap-4 sm:gap-5">
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-7 py-3.5 rounded-full text-base font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95"
+            >
+              <span>Request Evaluation License</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <a 
+              href="#simulator"
+              class="inline-flex items-center gap-2 border border-[#0b0b0b]/20 text-[#5b5a55] hover:text-[#0b0b0b] px-6 py-3.5 rounded-full text-base font-medium hover:bg-[#0b0b0b]/5 transition-all"
+            >
+              <span>View Live Telemetry ↓</span>
+            </a>
+          </div>
+
+          <!-- Verification Badge -->
+          <div class="mt-8 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs font-mono text-[#5b5a55]">
+            <span class="flex items-center gap-1.5 text-[#0b0b0b]">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Verified on Silicon
+            </span>
+            <span>Llama 3.2 3B (2.98 GiB)</span>
+            <span>Qwen 2.5 Coder 7B (3.02 GB)</span>
+            <span>Gemma 4 E4B-IT (15.15 GB Peak)</span>
+            <span>Gemma 2 9B (4.8 GB)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. THE BASELINE (The Verified Metrics) -->
+    <section id="baseline" class="py-24 sm:py-32 border-b border-[#0b0b0b]/10 bg-[#faf8f2]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="mb-14">
+          <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+            The Baseline
+          </p>
+          <h2 class="text-3xl sm:text-4xl font-normal tracking-tight text-[#0b0b0b]">
+            Deterministic performance verified on hardware silicon.
+          </h2>
+          <p class="mt-3 text-base text-[#5b5a55] max-w-2xl">
+            Evaluated non-mocked with exact AST syntax validation, cosine similarity telemetry, and zero repetition loops.
+          </p>
+        </div>
+
+        <!-- 3-Column Metric Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 border-y border-[#0b0b0b]/15 divide-y md:divide-y-0 md:divide-x divide-[#0b0b0b]/15">
+          <!-- Metric 1 -->
+          <div class="py-10 md:py-12 md:pr-10 lg:pr-12">
+            <div class="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#0b0b0b] font-mono">
+              15.15 GB
+            </div>
+            <div class="mt-4 text-base sm:text-lg text-[#0b0b0b] font-medium">
+              Peak VRAM footprint on RTX 5080.
+            </div>
+            <p class="mt-2 text-sm text-[#5b5a55] leading-relaxed">
+              Evaluates 4-billion parameter models entirely within consumer hardware limits without host swapping.
+            </p>
+          </div>
+
+          <!-- Metric 2 -->
+          <div class="py-10 md:py-12 md:px-10 lg:px-12">
+            <div class="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#0b0b0b] font-mono">
+              81.1%
+            </div>
+            <div class="mt-4 text-base sm:text-lg text-[#0b0b0b] font-medium">
+              AST Syntactic Validity | 0.0% Degenerate Loop Collapse (LiveCodeBench v6).
+            </div>
+            <p class="mt-2 text-sm text-[#5b5a55] leading-relaxed">
+              Retains 32.5% Pass@1 on AtCoder standard I/O.
+            </p>
+          </div>
+
+          <!-- Metric 3 -->
+          <div class="py-10 md:py-12 md:pl-10 lg:pl-12">
+            <div class="text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#0b0b0b] font-mono">
+              14.2 TPS
+            </div>
+            <div class="mt-4 text-base sm:text-lg text-[#0b0b0b] font-medium">
+              Sustained generation throughput.
+            </div>
+            <p class="mt-2 text-sm text-[#5b5a55] leading-relaxed">
+              Instantaneous closed-form linear algebra compression executed with zero gradient training epochs.
+            </p>
+          </div>
+        </div>
+
+        <!-- Verification & Methodology Note -->
+        <div class="mt-8 pt-6 border-t border-[#0b0b0b]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <p class="text-xs sm:text-sm text-[#5b5a55] font-mono leading-relaxed max-w-4xl">
+            Methodology: Evaluated live across official benchmark suites: HumanEval+ (54.88% Pass@1 on Qwen2.5-Coder-7B), LiveCodeBench v6 (175 problems, 81.1% AST, 58.1% Easy Pass@1 on Gemma 4 E4B-IT), and Llama 3.2 3B (0.80 exit cosine similarity). Full audited telemetry maps and Triton kernel specifications are available in the Technical Brief.
+          </p>
+          <button 
+            type="button"
+            data-modal-open="brief"
+            class="text-xs font-mono text-[#0b0b0b] hover:opacity-70 underline whitespace-nowrap cursor-pointer"
+          >
+            Request Evaluation License ↗
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. PRODUCTION MODEL MATRIX (New Data Showcase) -->
+    <section id="benchmarks" class="py-24 sm:py-32 border-b border-[#0b0b0b]/10 bg-[#f5f2ea]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="max-w-3xl mb-14">
+          <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+            Hardware Verification
+          </p>
+          <h2 class="text-3xl sm:text-4xl font-normal tracking-tight text-[#0b0b0b]">
+            Production Deployment Matrix
+          </h2>
+          <p class="mt-3 text-base text-[#5b5a55]">
+            Real measured footprints, benchmark accuracy, and target silicon across verified QTensor compilations.
+          </p>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white border border-[#0b0b0b]/12 rounded-xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse font-mono text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-[#faf8f2] border-b border-[#0b0b0b]/12 text-[#5b5a55] uppercase text-[11px] tracking-wider">
+                  <th class="py-4 px-6 font-semibold">Model Architecture</th>
+                  <th class="py-4 px-6 font-semibold">Base Footprint</th>
+                  <th class="py-4 px-6 font-semibold">QTensor Footprint</th>
+                  <th class="py-4 px-6 font-semibold">Reduction</th>
+                  <th class="py-4 px-6 font-semibold">Verified Benchmark</th>
+                  <th class="py-4 px-6 font-semibold">Target Hardware</th>
+                  <th class="py-4 px-6 font-semibold text-right">Access</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[#0b0b0b]/10 text-[#0b0b0b]">
+                <!-- Row 1: Llama 3.2 3B v2 -->
+                <tr class="hover:bg-[#f5f2ea]/50 transition-colors">
+                  <td class="py-4 px-6 font-medium">
+                    <div class="font-sans font-semibold text-[#0b0b0b]">Llama 3.2 3B QTensor v2</div>
+                    <div class="text-[11px] text-[#5b5a55]">Protected Semantic Corridor Compilation</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">6.00 GiB (BF16)</td>
+                  <td class="py-4 px-6 font-semibold text-emerald-700">2.98 GiB (v1) / 5.60 GiB (v2)</td>
+                  <td class="py-4 px-6 font-medium text-emerald-600">-50.4% / -6.7%</td>
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1 text-[#0b0b0b]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 0.8008 Cosine Sim
+                    </span>
+                    <div class="text-[11px] text-[#5b5a55]">Zero Repetition Loops</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">ARM Cortex / Apple Silicon / 4GB Edge</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" data-modal-open="brief" class="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0b0b0b] hover:opacity-70 underline cursor-pointer">
+                      <span>Request Evaluation License</span> ↗
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 2: Qwen 2.5 Coder 7B -->
+                <tr class="hover:bg-[#f5f2ea]/50 transition-colors">
+                  <td class="py-4 px-6 font-medium">
+                    <div class="font-sans font-semibold text-[#0b0b0b]">Qwen 2.5 Coder 7B QTensor</div>
+                    <div class="text-[11px] text-[#5b5a55]">Tier 1 Analytical Corridor Compilation</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">14.2 GB (FP16)</td>
+                  <td class="py-4 px-6 font-semibold text-emerald-700">3.02 GB</td>
+                  <td class="py-4 px-6 font-medium text-emerald-600">-78.7%</td>
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1 text-[#0b0b0b]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 54.88% Pass@1
+                    </span>
+                    <div class="text-[11px] text-[#5b5a55]">HumanEval+ Sandbox</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">4GB Industrial Edge / Jetson Orin</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" data-modal-open="brief" class="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0b0b0b] hover:opacity-70 underline cursor-pointer">
+                      <span>Request Evaluation License</span> ↗
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 3: Gemma 4 E4B-IT -->
+                <tr class="hover:bg-[#f5f2ea]/50 transition-colors">
+                  <td class="py-4 px-6 font-medium">
+                    <div class="font-sans font-semibold text-[#0b0b0b]">Gemma 4 E4B-IT QTensor</div>
+                    <div class="text-[11px] text-[#5b5a55]">Analytical Subspace Bridge Compilation</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">16.0 GB (&gt;16GB OOM)</td>
+                  <td class="py-4 px-6 font-semibold text-emerald-700">15.15 GB Peak VRAM</td>
+                  <td class="py-4 px-6 font-medium text-emerald-600">Fits 16GB VRAM</td>
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1 text-[#0b0b0b]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 81.1% AST Correct
+                    </span>
+                    <div class="text-[11px] text-[#5b5a55]">58.1% Pass@1 (LiveCodeBench v6)</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">RTX 5080 (16GB) / Consumer GPUs</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" data-modal-open="brief" class="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0b0b0b] hover:opacity-70 underline cursor-pointer">
+                      <span>Request Evaluation License</span> ↗
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 4: Gemma 2 9B IT -->
+                <tr class="hover:bg-[#f5f2ea]/50 transition-colors">
+                  <td class="py-4 px-6 font-medium">
+                    <div class="font-sans font-semibold text-[#0b0b0b]">Gemma 2 9B IT QTensor</div>
+                    <div class="text-[11px] text-[#5b5a55]">Closed-Form Analytical Decomposition</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">18.2 GB (BF16)</td>
+                  <td class="py-4 px-6 font-semibold text-emerald-700">4.80 GB</td>
+                  <td class="py-4 px-6 font-medium text-emerald-600">-73.6%</td>
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1 text-[#0b0b0b]">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Retains 68% FP16
+                    </span>
+                    <div class="text-[11px] text-[#5b5a55]">Deterministic Prefill</div>
+                  </td>
+                  <td class="py-4 px-6 text-[#5b5a55]">MacBook 8GB / Workstation Edge</td>
+                  <td class="py-4 px-6 text-right">
+                    <button type="button" data-modal-open="brief" class="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0b0b0b] hover:opacity-70 underline cursor-pointer">
+                      <span>Request Evaluation License</span> ↗
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono text-[#5b5a55]">
+          <span>* All models benchmarked zero-shot without fine-tuning or quantization calibration sets.</span>
+          <a href="#simulator" class="text-[#0b0b0b] hover:opacity-70 underline">
+            View Live Telemetry ↓
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. THE ENGINE (How it works - 01, 02, 03 Layout) -->
+    <section id="engine" class="py-24 sm:py-32 lg:py-36 border-b border-[#0b0b0b]/10 bg-[#faf8f2]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-20">
+          
+          <!-- Left Column (col-span-4) -->
+          <div class="md:col-span-4 md:sticky md:top-32 self-start">
+            <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+              Architecture
+            </p>
+            <h2 class="text-4xl sm:text-5xl font-normal tracking-tight text-[#0b0b0b]">
+              The Engine
+            </h2>
+            <p class="mt-6 text-base sm:text-lg text-[#5b5a55] leading-relaxed">
+              Deterministic linear algebra replaces heuristic backpropagation. We decompose high-dimensional weights into lean, mathematically stable edge representations.
+            </p>
+            <div class="mt-8 flex flex-wrap items-center gap-4">
+              <button 
+                type="button"
+                data-modal-open="brief"
+                class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-5 py-2.5 rounded-full text-sm font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95"
+              >
+                <span>Request Evaluation License</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+              <a 
+                href="#simulator"
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-[#5b5a55] hover:text-[#0b0b0b] transition-colors"
+              >
+                <span>View Live Telemetry ↓</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column (col-span-8) with 01, 02, 03 Numbered Taxonomy -->
+          <div class="md:col-span-8 space-y-16">
+            
+            <!-- 01 | Topological Corridor Partitioning -->
+            <article class="border-t border-[#0b0b0b]/15 pt-10">
+              <div class="flex items-baseline justify-between mb-4">
+                <span class="text-xs font-mono font-medium tracking-widest uppercase text-[#5b5a55]">
+                  Topology
+                </span>
+                <span class="text-2xl font-mono font-light text-[#0b0b0b]">
+                  01
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-normal tracking-tight text-[#0b0b0b] mb-4">
+                Topological Corridor Partitioning
+              </h3>
+              <p class="text-lg sm:text-xl text-[#5b5a55] font-normal leading-relaxed">
+                Preserves critical semantic embedding spaces and logit projection boundaries. QTensor isolates rank optimization away from sensitive boundary layers while maintaining 100% native attention mechanics across the network.
+              </p>
+              <div class="mt-6 text-sm text-[#0b0b0b] font-mono bg-[#0b0b0b]/5 px-4 py-2.5 rounded border border-[#0b0b0b]/10 inline-block">
+                Topological Isolation · Zero Manifold Distortion
+              </div>
+            </article>
+
+            <!-- 02 | Subspace Residual Bridging -->
+            <article class="border-t border-[#0b0b0b]/15 pt-10">
+              <div class="flex items-baseline justify-between mb-4">
+                <span class="text-xs font-mono font-medium tracking-widest uppercase text-[#5b5a55]">
+                  Linear Algebra
+                </span>
+                <span class="text-2xl font-mono font-light text-[#0b0b0b]">
+                  02
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-normal tracking-tight text-[#0b0b0b] mb-4">
+                Subspace Residual Bridging
+              </h3>
+              <p class="text-lg sm:text-xl text-[#5b5a55] font-normal leading-relaxed">
+                Standard low-rank factorization causes severe activation collapse and repetitive looping. QTensor employs proprietary analytical residual bridging to dynamically compensate for non-linear energy loss, eliminating repetition loops on long-context code generation.
+              </p>
+              <div class="mt-6 text-sm text-[#0b0b0b] font-mono bg-[#0b0b0b]/5 px-4 py-2.5 rounded border border-[#0b0b0b]/10 inline-block">
+                Closed-Form Stabilization · Non-Linear Activation Protection
+              </div>
+            </article>
+
+            <!-- 03 | Fixed-Point Runtime Pipeline -->
+            <article class="border-t border-[#0b0b0b]/15 pt-10 border-b pb-10">
+              <div class="flex items-baseline justify-between mb-4">
+                <span class="text-xs font-mono font-medium tracking-widest uppercase text-[#5b5a55]">
+                  Silicon Runtime
+                </span>
+                <span class="text-2xl font-mono font-light text-[#0b0b0b]">
+                  03
+                </span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl font-normal tracking-tight text-[#0b0b0b] mb-4">
+                Fixed-Point Runtime Pipeline
+              </h3>
+              <p class="text-lg sm:text-xl text-[#5b5a55] font-normal leading-relaxed">
+                Floating-point drift degrades compressed models over extended context windows. QTensor's proprietary execution kernels run deterministic accumulation directly on silicon, maximizing cache locality and minimizing time-to-first-token (TTFT).
+              </p>
+              <div class="mt-6 text-sm text-[#0b0b0b] font-mono bg-[#0b0b0b]/5 px-4 py-2.5 rounded border border-[#0b0b0b]/10 inline-block">
+                Low-Latency Execution · Sub-millisecond TTFT
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. INTERACTIVE COMPILATION SIMULATOR -->
+    <section id="simulator" class="py-24 sm:py-32 lg:py-36 border-b border-[#0b0b0b]/10 bg-[#f5f2ea]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="max-w-3xl mb-12">
+          <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+            Compilation Simulator
+          </p>
+          <h2 class="text-4xl sm:text-5xl font-normal tracking-tight text-[#0b0b0b]">
+            Inspect the compiled output.
+          </h2>
+          <p class="mt-4 text-lg text-[#5b5a55] leading-relaxed">
+            Test how QTensor compiles complex algorithmic models into edge-optimized silicon execution using our deterministic engine.
+          </p>
+        </div>
+
+        <!-- Simulator Card -->
+        <div class="max-w-4xl bg-white border border-[#0b0b0b]/12 rounded-xl shadow-sm overflow-hidden">
+          
+          <!-- Controls Bar -->
+          <div class="p-6 sm:p-8 border-b border-[#0b0b0b]/10 bg-white">
+            
+            <!-- Model Selection Bar -->
+            <div class="mb-5">
+              <label class="block text-xs font-mono font-medium tracking-wider uppercase text-[#5b5a55] mb-2">
+                1. Select Model Architecture
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button 
+                  type="button"
+                  data-model="llama3b"
+                  class="model-tab-btn px-3 py-2 text-xs font-mono rounded-lg border border-[#0b0b0b]/20 bg-[#0b0b0b] text-[#f5f2ea] text-left transition-all cursor-pointer"
+                >
+                  <div class="font-bold">Llama 3.2 3B</div>
+                  <div class="text-[10px] opacity-80">2.98 GiB (Sub-3GB)</div>
+                </button>
+                <button 
+                  type="button"
+                  data-model="qwen7b"
+                  class="model-tab-btn px-3 py-2 text-xs font-mono rounded-lg border border-[#0b0b0b]/15 bg-white text-[#5b5a55] text-left transition-all cursor-pointer hover:border-[#0b0b0b]/40"
+                >
+                  <div class="font-bold">Qwen 2.5 Coder 7B</div>
+                  <div class="text-[10px] opacity-80">3.02 GB (Tier 1)</div>
+                </button>
+                <button 
+                  type="button"
+                  data-model="gemma4"
+                  class="model-tab-btn px-3 py-2 text-xs font-mono rounded-lg border border-[#0b0b0b]/15 bg-white text-[#5b5a55] text-left transition-all cursor-pointer hover:border-[#0b0b0b]/40"
+                >
+                  <div class="font-bold">Gemma 4 E4B-IT</div>
+                  <div class="text-[10px] opacity-80">15.15 GB (Sub-16GB Fit)</div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Task Preset Selector -->
+            <div class="mb-4">
+              <label class="block text-xs font-mono font-medium tracking-wider uppercase text-[#5b5a55] mb-2">
+                2. Select Algorithmic Task Signature
+              </label>
+              <div class="flex flex-wrap gap-2">
+                <button 
+                  type="button"
+                  data-preset="search"
+                  class="preset-btn px-3 py-1.5 text-xs font-mono rounded-md border border-[#0b0b0b]/20 bg-[#f5f2ea] text-[#0b0b0b] hover:bg-[#0b0b0b] hover:text-[#f5f2ea] transition-all cursor-pointer"
+                >
+                  Binary Search (AtCoder abc388)
+                </button>
+                <button 
+                  type="button"
+                  data-preset="attention"
+                  class="preset-btn px-3 py-1.5 text-xs font-mono rounded-md border border-[#0b0b0b]/15 bg-white text-[#5b5a55] hover:bg-[#0b0b0b] hover:text-[#f5f2ea] transition-all cursor-pointer"
+                >
+                  Fused SwiGLU Residual Kernel
+                </button>
+                <button 
+                  type="button"
+                  data-preset="fixedpoint"
+                  class="preset-btn px-3 py-1.5 text-xs font-mono rounded-md border border-[#0b0b0b]/15 bg-white text-[#5b5a55] hover:bg-[#0b0b0b] hover:text-[#f5f2ea] transition-all cursor-pointer"
+                >
+                  Fixed-Point Runtime Pipeline
+                </button>
+              </div>
+            </div>
+
+            <!-- Hardware Target & Prompt Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+              <div class="md:col-span-8">
+                <label class="block text-xs font-mono font-medium tracking-wider uppercase text-[#5b5a55] mb-2">
+                  Task Signature or Prompt
+                </label>
+                <input 
+                  id="prompt-input"
+                  type="text" 
+                  value="def binary_search(arr: list[int], target: int) -> int:"
+                  class="w-full px-4 py-2.5 bg-[#fcfbfa] border border-[#0b0b0b]/20 rounded-lg text-[#0b0b0b] font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#0b0b0b] focus:border-[#0b0b0b] transition-all"
+                  placeholder="Enter function signature or prompt..."
+                />
+              </div>
+              <div class="md:col-span-4">
+                <label class="block text-xs font-mono font-medium tracking-wider uppercase text-[#5b5a55] mb-2">
+                  Hardware Silicon Target
+                </label>
+                <select 
+                  id="hardware-target"
+                  class="w-full px-3 py-2.5 bg-[#fcfbfa] border border-[#0b0b0b]/20 rounded-lg text-[#0b0b0b] font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-[#0b0b0b] focus:border-[#0b0b0b] transition-all"
+                >
+                  <option value="rtx5080" selected>NVIDIA RTX 5080 (16GB)</option>
+                  <option value="node4gb">Industrial Edge Node (4GB)</option>
+                  <option value="m2_8gb">Apple M2 / Unified Memory (8GB)</option>
+                  <option value="jetson_8gb">NVIDIA Jetson Orin Nano (8GB)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span id="compiling-pulse" class="w-2 h-2 rounded-full bg-[#0b0b0b] opacity-0 transition-opacity"></span>
+                <span id="simulator-status" class="text-xs text-[#5b5a55] font-mono">Ready to compile</span>
+              </div>
+
+              <!-- Run Compilation Button -->
+              <button 
+                id="btn-run-compile"
+                class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-black/85 transition-all shadow-sm cursor-pointer active:scale-95"
+              >
+                <span>Run Compilation</span>
+                <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Code Output Area with Telemetry Timeline -->
+          <div class="p-6 sm:p-8 bg-[#111111] text-[#f5f5f7]">
+            <div class="flex items-center justify-between pb-4 mb-4 border-b border-[#262626]">
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-[#888888]">COMPILED OUTPUT</span>
+                <span id="status-badge" class="text-xs font-mono text-[#34d399] flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> DETERMINISTIC EXIT
+                </span>
+              </div>
+              <button 
+                id="btn-copy-code"
+                class="text-xs font-mono text-[#aaaaaa] hover:text-white transition-colors cursor-pointer"
+              >
+                Copy Code
+              </button>
+            </div>
+
+            <!-- Telemetry Timeline -->
+            <div id="telemetry-box" class="mb-5 p-3.5 rounded-lg bg-[#18181b] border border-[#27272a] font-mono text-xs text-[#a1a1aa] space-y-1.5">
+              <div class="text-[10px] uppercase tracking-wider text-[#71717a] font-semibold flex items-center justify-between">
+                <span>Hardware Execution Telemetry</span>
+                <span id="telemetry-badge" class="text-[#34d399] font-normal">Active (14.2 TPS)</span>
+              </div>
+              <div id="telemetry-line-1" class="flex items-center gap-2 text-[#e4e4e7]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Initializing QTensor v2.0 Subspace Bridge...
+              </div>
+              <div id="telemetry-line-2" class="flex items-center gap-2 text-[#e4e4e7]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Allocated: 15.15 GB Peak (Fits within 15.92 GB RTX 5080)
+              </div>
+              <div id="telemetry-line-3" class="flex items-center gap-2 text-[#e4e4e7]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Preserving Attention & Exit Projections · 0% Repetition Loops
+              </div>
+            </div>
+
+            <pre class="font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto text-[#f5f5f7] min-h-[160px]"><code id="code-output">def binary_search(arr: list[int], target: int) -> int:
+    """
+    Compiled via QTensor Edge Engine (Zero-Shot Deterministic Pass)
+    Verified Silicon Execution | 0.0% Repetition Loops
+    """
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        val = arr[mid]
+        if val == target:
+            return mid
+        elif val < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1</code><span id="stream-cursor" class="inline-block w-2 h-4 bg-[#f5f5f7] ml-0.5 animate-pulse opacity-0"></span></pre>
+
+            <div class="mt-6 pt-4 border-t border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs font-mono text-[#777777]">
+              <span id="active-model-summary">Model: Llama 3.2 3B | 2.98 GiB Footprint</span>
+              <span id="target-summary">Target: NVIDIA RTX 5080 (16GB) · 14.2 TPS Verified</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GATED HUGGING FACE MODELS SHOWCASE -->
+    <section id="models" class="py-24 sm:py-32 border-b border-[#0b0b0b]/10 bg-[#faf8f2]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+          <div>
+            <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+              Model Verification
+            </p>
+            <h2 class="text-3xl sm:text-4xl font-normal tracking-tight text-[#0b0b0b]">
+              Hugging Face Model Repositories
+            </h2>
+            <p class="mt-3 text-base text-[#5b5a55] max-w-2xl">
+              Inspect verified pre-compiled QTensor models with gated safetensors available under MNDA, model cards, and reproducible evaluation configs.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-6 py-3 rounded-full text-sm font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95"
+            >
+              <span>Request Evaluation License</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <a 
+              href="#simulator" 
+              class="inline-flex items-center gap-1.5 px-5 py-3 rounded-full text-sm font-medium border border-[#0b0b0b]/20 text-[#5b5a55] hover:text-[#0b0b0b] hover:bg-[#0b0b0b]/5 transition-all"
+            >
+              <span>View Live Telemetry ↓</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <!-- Card 1 -->
+          <div class="bg-white border border-[#0b0b0b]/12 rounded-xl p-6 flex flex-col justify-between hover:border-[#0b0b0b]/30 transition-all shadow-sm">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-[#5b5a55] mb-3">
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">GATED</span>
+                <span>2.98 GiB</span>
+              </div>
+              <h3 class="font-sans font-bold text-lg text-[#0b0b0b] mb-1">llama-3.2-3b-qtensor-v2</h3>
+              <p class="text-xs text-[#5b5a55] leading-relaxed mb-4">
+                Topological buffer expansion with analytical corridor compilation. Full AST compliance and 0% repetition loops.
+              </p>
+            </div>
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center justify-between text-xs font-mono font-medium text-[#0b0b0b] pt-3 border-t border-[#0b0b0b]/10 hover:opacity-70 cursor-pointer w-full text-left"
+            >
+              <span>Request Evaluation License</span> ↗
+            </button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="bg-white border border-[#0b0b0b]/12 rounded-xl p-6 flex flex-col justify-between hover:border-[#0b0b0b]/30 transition-all shadow-sm">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-[#5b5a55] mb-3">
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">GATED</span>
+                <span>3.02 GB</span>
+              </div>
+              <h3 class="font-sans font-bold text-lg text-[#0b0b0b] mb-1">qwen-2.5-coder-7b-qtensor</h3>
+              <p class="text-xs text-[#5b5a55] leading-relaxed mb-4">
+                Sub-4GB edge compilation retaining 54.88% Pass@1 on HumanEval+. Zero gradient training.
+              </p>
+            </div>
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center justify-between text-xs font-mono font-medium text-[#0b0b0b] pt-3 border-t border-[#0b0b0b]/10 hover:opacity-70 cursor-pointer w-full text-left"
+            >
+              <span>Request Evaluation License</span> ↗
+            </button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="bg-white border border-[#0b0b0b]/12 rounded-xl p-6 flex flex-col justify-between hover:border-[#0b0b0b]/30 transition-all shadow-sm">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-[#5b5a55] mb-3">
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">GATED</span>
+                <span>4.80 GB</span>
+              </div>
+              <h3 class="font-sans font-bold text-lg text-[#0b0b0b] mb-1">gemma-2-9b-it-qtensor</h3>
+              <p class="text-xs text-[#5b5a55] leading-relaxed mb-4">
+                Closed-form analytical subspace decomposition. Fits 8GB MacBooks and edge devices with high semantic retention.
+              </p>
+            </div>
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center justify-between text-xs font-mono font-medium text-[#0b0b0b] pt-3 border-t border-[#0b0b0b]/10 hover:opacity-70 cursor-pointer w-full text-left"
+            >
+              <span>Request Evaluation License</span> ↗
+            </button>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="bg-white border border-[#0b0b0b]/12 rounded-xl p-6 flex flex-col justify-between hover:border-[#0b0b0b]/30 transition-all shadow-sm">
+            <div>
+              <div class="flex items-center justify-between text-xs font-mono text-[#5b5a55] mb-3">
+                <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">GATED</span>
+                <span>4.85 GB</span>
+              </div>
+              <h3 class="font-sans font-bold text-lg text-[#0b0b0b] mb-1">QTensor-Llama-3.1-8B</h3>
+              <p class="text-xs text-[#5b5a55] leading-relaxed mb-4">
+                Enterprise edge compilation for autonomous and embedded systems. High-entropy channel calibration.
+              </p>
+            </div>
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center justify-between text-xs font-mono font-medium text-[#0b0b0b] pt-3 border-t border-[#0b0b0b]/10 hover:opacity-70 cursor-pointer w-full text-left"
+            >
+              <span>Request Evaluation License</span> ↗
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. ENTERPRISE DEPLOYMENT SECTION (Supported by ZeroFold) -->
+    <section id="enterprise" class="py-24 sm:py-32 border-b border-[#0b0b0b]/10 bg-[#f5f2ea]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="bg-white border border-[#0b0b0b]/12 rounded-2xl p-8 sm:p-12 lg:p-16 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16 items-start">
+            
+            <!-- Left Column (col-span-5) -->
+            <div class="md:col-span-5">
+              <p class="text-xs font-mono font-medium tracking-widest uppercase text-[#5b5a55] mb-3">
+                <a href="https://zerofold.com.au" target="_blank" rel="noopener noreferrer" class="hover:text-[#0b0b0b] underline underline-offset-4 decoration-[#0b0b0b]/30">ZeroFold</a> Engineering Practice
+              </p>
+              <h2 class="text-3xl sm:text-4xl font-normal tracking-tight text-[#0b0b0b] leading-tight">
+                Enterprise Integration & Custom Silicon Runtimes
+              </h2>
+            </div>
+
+            <!-- Right Column (col-span-7) -->
+            <div class="md:col-span-7">
+              <p class="text-lg sm:text-xl text-[#5b5a55] font-normal leading-relaxed">
+                QTensor's core compiler is supported by <a href="https://zerofold.com.au" target="_blank" rel="noopener noreferrer" class="text-[#0b0b0b] underline underline-offset-4 hover:opacity-80 transition-opacity">ZeroFold</a>'s engineering practice. We deliver custom kernel optimization, edge hardware integration, and sovereign production pipelines for enterprise, defense, robotics, and embedded systems.
+              </p>
+              <div class="mt-8 flex flex-wrap items-center gap-4">
+                <button 
+                  type="button"
+                  data-modal-open="brief"
+                  class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-6 py-3 rounded-full text-sm font-medium hover:bg-black/85 transition-all shadow-sm cursor-pointer active:scale-95"
+                >
+                  <span>Request Evaluation License</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+                <a 
+                  href="#simulator"
+                  class="inline-flex items-center gap-1.5 text-sm font-medium text-[#5b5a55] hover:text-[#0b0b0b] transition-colors"
+                >
+                  <span>View Live Telemetry ↓</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. BOTTOM CTA PANEL -->
+    <section class="py-24 sm:py-32 bg-[#0b0b0b] text-[#f5f2ea]">
+      <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div class="max-w-3xl">
+          <p class="text-xs sm:text-sm font-medium tracking-widest uppercase text-[#8e8d88] mb-4">
+            Deterministic Acceleration
+          </p>
+          <h2 class="text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-[#f5f2ea] leading-tight">
+            Ready to deploy sub-3GB intelligence to the edge?
+          </h2>
+          <p class="mt-6 text-xl text-[#8e8d88] leading-relaxed">
+            Request our comprehensive technical brief or schedule an engineering consultation with our team in Melbourne.
+          </p>
+          <div class="mt-10 flex flex-wrap items-center gap-4">
+            <button 
+              type="button"
+              data-modal-open="brief"
+              class="inline-flex items-center gap-2 bg-[#f5f2ea] text-[#0b0b0b] px-7 py-3.5 rounded-full text-base font-medium hover:bg-white transition-all cursor-pointer shadow-sm active:scale-95"
+            >
+              <span>Request Evaluation License</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <a 
+              href="#simulator"
+              class="inline-flex items-center gap-2 border border-[#f5f2ea]/40 text-[#f5f2ea] px-7 py-3.5 rounded-full text-base font-medium hover:bg-[#f5f2ea] hover:text-[#0b0b0b] transition-all"
+            >
+              <span>View Live Telemetry ↓</span>
+            </a>
+          </div>
+          <p class="mt-4 text-xs font-mono text-[#8e8d88]">
+            * Evaluation weights and proprietary Triton kernel sources are released under Enterprise MNDA.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#f5f2ea] py-16 sm:py-24 border-t border-[#0b0b0b]/10 text-sm text-[#5b5a55]">
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 pb-12 border-b border-[#0b0b0b]/10">
+        <div>
+          <a href="/" class="text-xl font-semibold tracking-tight text-[#0b0b0b]">
+            QTensor
+          </a>
+          <p class="mt-2 text-sm text-[#5b5a55]">
+            Deterministic Edge Intelligence Engine.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-8 text-sm">
+          <a href="#baseline" class="hover:text-[#0b0b0b] transition-colors">Baseline</a>
+          <a href="#benchmarks" class="hover:text-[#0b0b0b] transition-colors">Benchmarks</a>
+          <a href="#engine" class="hover:text-[#0b0b0b] transition-colors">The Engine</a>
+          <a href="#simulator" class="hover:text-[#0b0b0b] transition-colors">Simulator</a>
+          <a href="#models" class="hover:text-[#0b0b0b] transition-colors">Models</a>
+          <a href="/contact" class="hover:text-[#0b0b0b] transition-colors">Contact</a>
+          <a href="https://huggingface.co/trentzap" target="_blank" rel="noopener noreferrer" class="hover:text-[#0b0b0b] transition-colors">Hugging Face ↗</a>
+          <a href="https://www.linkedin.com/in/trent-i-parsons/" target="_blank" rel="noopener noreferrer" class="hover:text-[#0b0b0b] transition-colors">LinkedIn ↗</a>
+          <button type="button" data-modal-open="brief" class="hover:text-[#0b0b0b] transition-colors cursor-pointer">
+            Request Evaluation License ↗
+          </button>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <p>© 2026 QTensor Pty Ltd. QTensor Edge is a proprietary compiler technology developed by <a href="https://zerofold.com.au" target="_blank" rel="noopener noreferrer" class="underline hover:text-[#0b0b0b] transition-colors">ZeroFold</a>, a Melbourne-based software engineering firm.</p>
+        <p>Patent Pending · All Rights Reserved</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MINIMALIST MODAL: TECHNICAL BRIEF ACCESS & EVALUATION LICENSE -->
+  <div id="brief-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden modal-backdrop">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-8 border border-[#0b0b0b]/15 shadow-2xl relative modal-panel">
+      <button 
+        type="button"
+        data-modal-close="brief"
+        class="absolute top-6 right-6 text-sm font-mono text-[#5b5a55] hover:text-[#0b0b0b] transition-colors cursor-pointer"
+      >
+        [CLOSE ✕]
+      </button>
+
+      <p class="text-xs font-mono uppercase tracking-widest text-[#5b5a55] mb-2">Technical Brief Access</p>
+      <h3 class="text-2xl font-normal tracking-tight text-[#0b0b0b] mb-4">Request Evaluation License</h3>
+      <p class="text-sm text-[#5b5a55] mb-6 leading-relaxed">
+        Access the complete QTensor v2.0 evaluation license, technical specifications, and gated model weights.
+      </p>
+
+      <form id="brief-form" action="https://formsubmit.co/ajax/consult@qtensor.com.au" method="POST" class="space-y-4">
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-wider text-[#5b5a55] mb-1.5">Work Email *</label>
+          <input 
+            id="brief-email"
+            name="Work Email"
+            type="email" 
+            required 
+            placeholder="engineer@enterprise.com" 
+            class="w-full px-4 py-2.5 bg-[#faf8f2] border border-[#0b0b0b]/15 rounded-lg text-sm text-[#0b0b0b] focus:outline-none focus:ring-1 focus:ring-[#0b0b0b]"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-wider text-[#5b5a55] mb-1.5">Organisation *</label>
+          <input 
+            id="brief-org"
+            name="Organisation"
+            type="text" 
+            required 
+            placeholder="Automotive / Robotics / Hardware Co." 
+            class="w-full px-4 py-2.5 bg-[#faf8f2] border border-[#0b0b0b]/15 rounded-lg text-sm text-[#0b0b0b] focus:outline-none focus:ring-1 focus:ring-[#0b0b0b]"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-mono uppercase tracking-wider text-[#5b5a55] mb-1.5">Target Hardware</label>
+          <input 
+            id="brief-hw"
+            name="Target Hardware"
+            type="text" 
+            placeholder="e.g. NVIDIA RTX 5080 (16GB), Jetson Orin Nano, Apple M-Series" 
+            class="w-full px-4 py-2.5 bg-[#faf8f2] border border-[#0b0b0b]/15 rounded-lg text-sm text-[#0b0b0b] focus:outline-none focus:ring-1 focus:ring-[#0b0b0b]"
+          />
+        </div>
+
+        <button 
+          type="submit" 
+          id="btn-submit-request"
+          class="w-full mt-2 inline-flex items-center justify-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] py-3 rounded-lg text-sm font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95"
+        >
+          <span>Submit Request</span>
+          <span aria-hidden="true">↗</span>
+        </button>
+
+        <p class="mt-3 text-xs text-[#5b5a55] font-mono leading-relaxed">
+          Your request is routed directly to <a href="mailto:consult@qtensor.com.au" class="underline text-[#0b0b0b] hover:opacity-80">consult@qtensor.com.au</a>. For urgent enterprise or defense queries, connect directly on <a href="https://www.linkedin.com/in/trent-i-parsons/" target="_blank" rel="noopener noreferrer" class="underline text-[#0b0b0b] hover:opacity-80">LinkedIn ↗</a>.
+        </p>
+      </form>
+
+      <div id="brief-confirmation" class="hidden text-center py-6">
+        <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-[#0b0b0b] text-[#f5f2ea] flex items-center justify-center font-mono text-xl">
+          ✓
+        </div>
+        <h4 class="text-xl font-medium text-[#0b0b0b] mb-1">Request Received</h4>
+        <p class="text-xs text-[#5b5a55] leading-relaxed mb-6">
+          Your evaluation license request has been securely submitted to consult@qtensor.com.au. An engineering representative will review your target hardware specifications and contact you shortly.
+        </p>
+
+        <div class="space-y-3">
+          <button 
+            type="button"
+            id="btn-copy-brief-info"
+            class="w-full inline-flex items-center justify-center gap-2 border border-[#0b0b0b]/20 text-[#0b0b0b] py-2.5 rounded-lg text-xs font-mono hover:bg-[#0b0b0b]/5 transition-all cursor-pointer"
+          >
+            <span>Copy Request Summary to Clipboard</span>
+          </button>
+          <button 
+            type="button"
+            data-modal-close="brief"
+            class="w-full inline-flex items-center justify-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] py-2.5 rounded-lg text-xs font-medium hover:bg-black/85 transition-all cursor-pointer"
+          >
+            Close Window
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SIMULATOR & MODAL CONTROLLER SCRIPT -->
+  <script is:inline>
+    // ----------------------------------------------------
+    // 1. DATA MODELS & PRESETS
+    // ----------------------------------------------------
+    const modelProfiles = {
+      llama3b: {
+        name: "Llama 3.2 3B QTensor v2",
+        footprint: "2.98 GiB (v1) / 5.60 GiB (v2)",
+        tps: "84 TPS",
+        cosineSim: "0.8008",
+        techNote: "Protected Semantic Corridor Compilation",
+        vramText: "VRAM: 2,981 MB (Fits in 4GB Edge Node)",
+        snippets: {
+          search: {
+            prompt: "def binary_search(arr: list[int], target: int) -> int:",
+            code: `def binary_search(arr: list[int], target: int) -> int:
+    """
+    Compiled via QTensor Edge Engine (Zero-Shot Deterministic Pass)
+    Verified Silicon Execution | 0.0% Repetition Loops
+    """
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        val = arr[mid]
+        if val == target:
+            return mid
+        elif val < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1`
+          },
+          attention: {
+            prompt: "def fused_attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:",
+            code: `def fused_swiglu_attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:
+    """
+    QTensor Edge Engine Attention Kernel
+    Deterministic Fixed-Point Execution
+    """
+    # Native attention preservation across all layers
+    scores = fixed_point_matmul(q, k.transpose(-2, -1), scale=0.125)
+    weights = softmax_fixed_point(scores, dim=-1)
+    return fixed_point_matmul(weights, v)`
+          },
+          fixedpoint: {
+            prompt: "def fixed_point_dot(a: IntTensor, b: IntTensor) -> IntTensor:",
+            code: `def fixed_point_dot(a: IntTensor, b: IntTensor) -> IntTensor:
+    """
+    Fixed-Point Runtime Pipeline
+    Eliminates non-linear SwiGLU underflow drift.
+    """
+    acc = int160(0)
+    for i in range(len(a)):
+        prod = int160(a[i]) * int160(b[i])
+        acc += (prod >> 130)
+    return acc`
+          }
+        }
+      },
+      qwen7b: {
+        name: "Qwen 2.5 Coder 7B QTensor",
+        footprint: "3.02 GB (Tier 1)",
+        tps: "72 TPS",
+        cosineSim: "0.7842",
+        techNote: "Tier 1 Analytical Corridor Compilation · HumanEval 54.88% Pass@1",
+        vramText: "VRAM: 3,024 MB (Success - Fits in 4GB Edge Silicon)",
+        snippets: {
+          search: {
+            prompt: "def binary_search(arr: list[int], target: int) -> int:",
+            code: `def binary_search(arr: list[int], target: int) -> int:
+    """
+    Compiled via QTensor Tier 1 Engine (Qwen 2.5 Coder 7B)
+    Deterministic closed-form execution on 4GB edge hardware.
+    Pass@1: 54.88% on HumanEval+ Sandbox.
+    """
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        val = arr[mid]
+        if val == target:
+            return mid
+        elif val < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1`
+          },
+          attention: {
+            prompt: "def fused_attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:",
+            code: `def fused_attention_qwen(q: Tensor, k: Tensor, v: Tensor) -> Tensor:
+    """
+    QTensor Tier 1 L1-Bypass Attention Kernel
+    Streams projections directly through shared registers.
+    """
+    scores = fixed_point_matmul(q, k.transpose(-2, -1), scale=0.078)
+    weights = softmax_fixed_point(scores, dim=-1)
+    return fixed_point_matmul(weights, v)`
+          },
+          fixedpoint: {
+            prompt: "def fixed_point_dot(a: IntTensor, b: IntTensor) -> IntTensor:",
+            code: `def fixed_point_dot_qwen(a: IntTensor, b: IntTensor) -> IntTensor:
+    """
+    Fixed-Point Accumulation Pipeline on RTX / Jetson Orin
+    """
+    acc = int160(0)
+    for i in range(len(a)):
+        acc += (int160(a[i]) * int160(b[i])) >> 130
+    return acc`
+          }
+        }
+      },
+      gemma4: {
+        name: "Gemma 4 E4B-IT QTensor",
+        footprint: "15.15 GB Peak (Sub-16GB Fit)",
+        tps: "14.2 TPS",
+        cosineSim: "0.8114",
+        techNote: "Analytical Subspace Bridge Compilation",
+        vramText: "VRAM: 15.15 GB (Fits within 15.92 GB RTX 5080)",
+        snippets: {
+          search: {
+            prompt: "def binary_search(arr: list[int], target: int) -> int:",
+            code: `import sys
+
+def solve():
+    """
+    Compiled via QTensor Edge Engine (Zero-Shot Deterministic Pass)
+    LiveCodeBench v6 Verified | 81.1% AST Correctness | 0% Loop Collapse
+    """
+    lines = sys.stdin.read().split()
+    if not lines:
+        return
+    n, q = map(int, lines[:2])
+    arr = list(map(int, lines[2:2+n]))
+    queries = list(map(int, lines[2+n:2+n+q]))
+    
+    for target in queries:
+        lo, hi = 0, n - 1
+        found = -1
+        while lo <= hi:
+            mid = (lo + hi) // 2
+            if arr[mid] == target:
+                found = mid
+                break
+            elif arr[mid] < target:
+                lo = mid + 1
+            else:
+                hi = mid - 1
+        print(found)
+
+if __name__ == '__main__':
+    solve()`
+          },
+          attention: {
+            prompt: "def fused_attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:",
+            code: `def fused_gemma_sliding_window_attention(q: Tensor, k: Tensor, v: Tensor) -> Tensor:
+    """
+    Gemma 4 Sliding-Window Attention Kernel with Pristine Semantic Buffers
+    Preserves critical semantic embedding spaces and logit projection boundaries.
+    """
+    window_size = 1024
+    scores = fixed_point_sliding_window(q, k, window_size=window_size)
+    return fixed_point_matmul(softmax_fixed_point(scores), v)`
+          },
+          fixedpoint: {
+            prompt: "def fixed_point_dot(a: IntTensor, b: IntTensor) -> IntTensor:",
+            code: `def fixed_point_subspace_bridge_dot(a: IntTensor, b: IntTensor) -> IntTensor:
+    """
+    Analytical residual bridge compensation dynamically normalized on silicon.
+    """
+    acc = int160(0)
+    for i in range(len(a)):
+        acc += (int160(a[i]) * int160(b[i])) >> 130
+    return acc`
+          }
+        }
+      }
+    };
+
+    let currentModelKey = 'llama3b';
+    let currentTaskKey = 'search';
+
+    const hardwareProfiles = {
+      node4gb: {
+        label: "Industrial Edge Node (4GB)",
+        vramText: "Allocated: 2.98 GB (Fits in 4GB Edge Silicon)",
+        tps: "84 TPS"
+      },
+      m2_8gb: {
+        label: "Apple M2 Unified Memory (8GB)",
+        vramText: "Allocated: 2.98 GB (Fits in 8GB RAM, 37% load)",
+        tps: "84 TPS"
+      },
+      jetson_8gb: {
+        label: "NVIDIA Jetson Orin Nano (8GB)",
+        vramText: "Allocated: 3.02 GB (Zero swap, fits in 8GB unified)",
+        tps: "68 TPS"
+      },
+      rtx5080: {
+        label: "NVIDIA RTX 5080 (16GB)",
+        vramText: "Allocated: 15.15 GB Peak (Fits within 15.92 GB VRAM)",
+        tps: "14.2 TPS"
+      }
+    };
+
+    // ----------------------------------------------------
+    // 2. SIMULATOR CONTROLLER
+    // ----------------------------------------------------
+    const btnRun = document.getElementById('btn-run-compile');
+    const statusText = document.getElementById('simulator-status');
+    const pulse = document.getElementById('compiling-pulse');
+    const codeOutput = document.getElementById('code-output');
+
+    const targetSelect = document.getElementById('hardware-target');
+    const targetSummary = document.getElementById('target-summary');
+    const activeModelSummary = document.getElementById('active-model-summary');
+    const telBadge = document.getElementById('telemetry-badge');
+    const line1 = document.getElementById('telemetry-line-1');
+    const line2 = document.getElementById('telemetry-line-2');
+    const line3 = document.getElementById('telemetry-line-3');
+    const streamCursor = document.getElementById('stream-cursor');
+
+    // Model Tab switcher
+    document.querySelectorAll('.model-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mKey = btn.getAttribute('data-model');
+        if (!modelProfiles[mKey]) return;
+        currentModelKey = mKey;
+
+        document.querySelectorAll('.model-tab-btn').forEach(b => {
+          b.classList.remove('bg-[#0b0b0b]', 'text-[#f5f2ea]', 'border-[#0b0b0b]/20');
+          b.classList.add('bg-white', 'text-[#5b5a55]', 'border-[#0b0b0b]/15');
+        });
+        btn.classList.add('bg-[#0b0b0b]', 'text-[#f5f2ea]', 'border-[#0b0b0b]/20');
+        btn.classList.remove('bg-white', 'text-[#5b5a55]', 'border-[#0b0b0b]/15');
+
+        const prof = modelProfiles[mKey];
+        activeModelSummary.textContent = `Model: ${prof.name} | ${prof.footprint}`;
+        
+        // Auto-adjust target hardware dropdown
+        if (mKey === 'gemma4') {
+          targetSelect.value = 'rtx5080';
+        } else if (mKey === 'qwen7b') {
+          targetSelect.value = 'node4gb';
+        }
+
+        updateSimulatorView();
+      });
+    });
+
+    // Preset button switcher
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentTaskKey = btn.getAttribute('data-preset');
+        document.querySelectorAll('.preset-btn').forEach(b => {
+          b.classList.remove('bg-[#f5f2ea]', 'text-[#0b0b0b]', 'border-[#0b0b0b]/20');
+          b.classList.add('bg-white', 'text-[#5b5a55]', 'border-[#0b0b0b]/15');
+        });
+        btn.classList.add('bg-[#f5f2ea]', 'text-[#0b0b0b]', 'border-[#0b0b0b]/20');
+        btn.classList.remove('bg-white', 'text-[#5b5a55]', 'border-[#0b0b0b]/15');
+
+        updateSimulatorView();
+        triggerCompile();
+      });
+    });
+
+    function updateSimulatorView() {
+      const model = modelProfiles[currentModelKey];
+      const snippet = model.snippets[currentTaskKey] || model.snippets.search;
+      document.getElementById('prompt-input').value = snippet.prompt;
+    }
+
+    targetSelect.addEventListener('change', () => {
+      const hw = hardwareProfiles[targetSelect.value] || hardwareProfiles.node4gb;
+      const model = modelProfiles[currentModelKey];
+      targetSummary.textContent = `Target: ${hw.label} · ${hw.tps} Verified`;
+      line2.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> ${hw.vramText}`;
+    });
+
+    let streamInterval = null;
+
+    function streamCodeOutput(fullText) {
+      if (streamInterval) clearInterval(streamInterval);
+      codeOutput.textContent = "";
+      streamCursor.classList.remove('opacity-0');
+      
+      let index = 0;
+      const chunkSize = 20;
+      streamInterval = setInterval(() => {
+        index += chunkSize;
+        if (index >= fullText.length) {
+          codeOutput.textContent = fullText;
+          clearInterval(streamInterval);
+          streamCursor.classList.add('opacity-0');
+          btnRun.disabled = false;
+          statusText.textContent = "Execution complete · Verified deterministic exit";
+          pulse.classList.add('opacity-0');
+        } else {
+          codeOutput.textContent = fullText.slice(0, index);
+        }
+      }, 35);
+    }
+
+    function triggerCompile() {
+      const model = modelProfiles[currentModelKey];
+      const hw = hardwareProfiles[targetSelect.value] || hardwareProfiles.node4gb;
+      const snippet = model.snippets[currentTaskKey] || model.snippets.search;
+
+      targetSummary.textContent = `Target: ${hw.label} · ${hw.tps} Verified`;
+      statusText.textContent = `Executing deterministic ${model.name} compilation...`;
+      pulse.classList.remove('opacity-0');
+      btnRun.disabled = true;
+
+      // Telemetry sequence
+      line1.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse"></span> Compiling ${model.name}...`;
+      line2.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-neutral-600"></span> ${hw.vramText}`;
+      line3.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-neutral-600"></span> Measuring Cosine Similarity (Layer 24)...`;
+
+      setTimeout(() => {
+        line1.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> ${model.name} Compiled in 11.4s`;
+        line2.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> ${hw.vramText}`;
+      }, 180);
+
+      setTimeout(() => {
+        line3.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-[#34d399]"></span> Exit Cosine Sim: ${model.cosineSim} · 0% Repetition Loops`;
+        statusText.textContent = `Streaming tokens @ ${hw.tps}`;
+        streamCodeOutput(snippet.code);
+      }, 400);
+    }
+
+    btnRun.addEventListener('click', () => {
+      triggerCompile();
+    });
+
+    // Copy code button
+    document.getElementById('btn-copy-code').addEventListener('click', () => {
+      const text = codeOutput.textContent;
+      navigator.clipboard.writeText(text);
+      const btn = document.getElementById('btn-copy-code');
+      btn.textContent = "Copied!";
+      setTimeout(() => {
+        btn.textContent = "Copy Code";
+      }, 1500);
+    });
+
+    // ----------------------------------------------------
+    // 3. ROBUST CALL-TO-ACTION & MODAL CONTROLLER
+    // ----------------------------------------------------
+    const modal = document.getElementById('brief-modal');
+    const briefForm = document.getElementById('brief-form');
+    const briefConf = document.getElementById('brief-confirmation');
+    const btnDirectMailto = document.getElementById('btn-direct-mailto');
+    const btnCopyBriefInfo = document.getElementById('btn-copy-brief-info');
+
+    function openModal() {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        briefForm.classList.remove('hidden');
+        briefConf.classList.add('hidden');
+      }, 300);
+    }
+
+    // Attach to all buttons with data-modal-open="brief"
+    document.querySelectorAll('[data-modal-open="brief"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal();
+      });
+    });
+
+    // Attach to all close buttons
+    document.querySelectorAll('[data-modal-close="brief"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeModal();
+      });
+    });
+
+    // Click outside backdrop to close
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Escape key closes modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        closeModal();
+      }
+    });
+
+    let lastSubmissionSummary = "";
+
+    // Form submission handler
+    briefForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('btn-submit-request') || briefForm.querySelector('button[type="submit"]');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Submitting...</span>';
+      }
+
+      const email = document.getElementById('brief-email')?.value || '';
+      const org = document.getElementById('brief-org')?.value || '';
+      const hw = document.getElementById('brief-hw')?.value || 'NVIDIA RTX 5080 (16GB)';
+
+      lastSubmissionSummary = `QTensor Evaluation License Request:
+Email: ${email}
+Organisation: ${org}
+Target Hardware: ${hw}
+Timestamp: ${new Date().toISOString()}`;
+
+      const payload = {
+        "Work Email": email,
+        "Organisation": org,
+        "Target Hardware": hw,
+        email: email,
+        organisation: org,
+        targetHardware: hw,
+        _replyto: email,
+        _subject: `QTensor Evaluation License Request - ${org}`
+      };
+
+      try {
+        const endpoint = briefForm.getAttribute('action') || 'https://formsubmit.co/ajax/consult@qtensor.com.au';
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        // Toggle UI to Request Received success state ONLY upon receiving a 200 OK response
+        if (response.status === 200) {
+          briefForm.classList.add('hidden');
+          briefConf.classList.remove('hidden');
+        } else {
+          console.error('Submission failed with status:', response.status);
+          alert('Submission failed with status ' + response.status + '. Please try again or email consult@qtensor.com.au directly.');
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+        }
+      } catch (err) {
+        console.error('Submission error:', err);
+        alert('Network error submitting request. Please try again or email consult@qtensor.com.au directly.');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+      }
+    });
+
+    // Copy brief summary button
+    btnCopyBriefInfo.addEventListener('click', () => {
+      navigator.clipboard.writeText(lastSubmissionSummary);
+      btnCopyBriefInfo.innerHTML = "<span>Copied to Clipboard!</span>";
+      setTimeout(() => {
+        btnCopyBriefInfo.innerHTML = "<span>Copy Request Summary to Clipboard</span>";
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
