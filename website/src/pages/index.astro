@@ -171,7 +171,7 @@
             <span>Llama 3.2 3B (2.98 GiB)</span>
             <span>Qwen 2.5 Coder 7B (3.02 GB)</span>
             <span>Gemma 4 E4B-IT (15.15 GB Peak)</span>
-            <span>Gemma 2 9B (4.8 GB)</span>
+            <span>Gemma 2 9B (5.71 GB · 72.06% MMLU)</span>
           </div>
         </div>
       </div>
@@ -237,7 +237,7 @@
         <!-- Verification & Methodology Note -->
         <div class="mt-8 pt-6 border-t border-[#0b0b0b]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p class="text-xs sm:text-sm text-[#5b5a55] font-mono leading-relaxed max-w-4xl">
-            Methodology: Evaluated live across official benchmark suites: HumanEval+ (54.88% Pass@1 on Qwen2.5-Coder-7B), LiveCodeBench v6 (175 problems, 81.1% AST, 58.1% Easy Pass@1 on Gemma 4 E4B-IT), and Llama 3.2 3B (0.80 exit cosine similarity). Full audited telemetry maps and Triton kernel specifications are available in the Technical Brief.
+            Methodology: Evaluated live across official benchmark suites: HumanEval+ (54.88% Pass@1 on Qwen2.5-Coder-7B), LiveCodeBench v6 (175 problems, 81.1% AST, 58.1% Easy Pass@1 on Gemma 4 E4B-IT, 30.0% Pass@1 on Gemma 2 9B), MMLU 5-shot (72.06% Macro-Average / 95.82% retention on Gemma 2 9B QTensor), and Llama 3.2 3B (0.80 exit cosine similarity). Full audited telemetry maps and Triton kernel specifications are available in the Technical Brief.
           </p>
           <button 
             type="button"
@@ -350,22 +350,28 @@
                   </td>
                 </tr>
 
-                <!-- Row 4: Gemma 2 9B IT -->
+                <!-- Row 4: Gemma 2 9B QTensor -->
                 <tr class="hover:bg-[#f5f2ea]/50 transition-colors">
                   <td class="py-4 px-6 font-medium">
-                    <div class="font-sans font-semibold text-[#0b0b0b]">Gemma 2 9B IT QTensor</div>
-                    <div class="text-[11px] text-[#5b5a55]">Closed-Form Analytical Decomposition</div>
+                    <div class="font-sans font-semibold text-[#0b0b0b]">Gemma 2 9B QTensor</div>
+                    <div class="text-[11px] text-[#5b5a55]">Closed-Form Analytical Subspace Decomposition</div>
                   </td>
-                  <td class="py-4 px-6 text-[#5b5a55]">18.2 GB (BF16)</td>
-                  <td class="py-4 px-6 font-semibold text-emerald-700">4.80 GB</td>
-                  <td class="py-4 px-6 font-medium text-emerald-600">-73.6%</td>
+                  <td class="py-4 px-6 text-[#5b5a55]">18.5 GB (BF16)</td>
+                  <td class="py-4 px-6 font-semibold text-emerald-700">
+                    5.71 GB static
+                    <div class="text-[11px] text-[#5b5a55] font-normal font-sans">11.10 GB peak VRAM</div>
+                  </td>
+                  <td class="py-4 px-6 font-medium text-emerald-600">-69.1% static</td>
                   <td class="py-4 px-6">
                     <span class="inline-flex items-center gap-1 text-[#0b0b0b]">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Retains 68% FP16
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 72.06% MMLU (95.82% ret.)
                     </span>
-                    <div class="text-[11px] text-[#5b5a55]">Deterministic Prefill</div>
+                    <div class="text-[11px] text-[#5b5a55]">30.0% Pass@1 (100% AST LiveCodeBench)</div>
                   </td>
-                  <td class="py-4 px-6 text-[#5b5a55]">MacBook 8GB / Workstation Edge</td>
+                  <td class="py-4 px-6 text-[#5b5a55]">
+                    <div>RTX 5080 (16GB) · 14.7 TPS</div>
+                    <div class="text-[11px] text-emerald-700 font-medium">0.0% WDDM PCIe paging</div>
+                  </td>
                   <td class="py-4 px-6 text-right">
                     <button type="button" data-modal-open="brief" class="inline-flex items-center gap-1 text-xs font-mono font-medium text-[#0b0b0b] hover:opacity-70 underline cursor-pointer">
                       <span>Request Evaluation License</span> ↗
@@ -382,6 +388,161 @@
           <a href="#simulator" class="text-[#0b0b0b] hover:opacity-70 underline">
             View Live Telemetry ↓
           </a>
+        </div>
+
+        <!-- ARCHITECTURE VALIDATION: GEMMA 2 9B QTENSOR (Enterprise Technical Specification) -->
+        <div class="mt-14 bg-white border border-[#0b0b0b]/15 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-sm">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-[#0b0b0b]/10 mb-8">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0b0b0b]/5 border border-[#0b0b0b]/10 text-xs font-mono uppercase tracking-wider text-[#5b5a55] mb-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Enterprise Technical Specification · Audited Telemetry</span>
+              </div>
+              <h3 class="text-2xl sm:text-3xl lg:text-4xl font-normal tracking-tight text-[#0b0b0b]">
+                Architecture Validation: Gemma 2 9B QTensor
+              </h3>
+              <p class="mt-2 text-sm sm:text-base text-[#5b5a55] max-w-3xl">
+                Non-mocked empirical audit on consumer silicon (NVIDIA RTX 5080 16GB) framing zero-paging tensor execution and preserved syntactic-semantic topology.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 shrink-0">
+              <button 
+                type="button" 
+                data-modal-open="brief" 
+                class="inline-flex items-center gap-2 bg-[#0b0b0b] text-[#f5f2ea] px-6 py-3 rounded-full text-xs font-mono font-medium hover:bg-black/85 transition-all cursor-pointer shadow-sm active:scale-95 whitespace-nowrap"
+              >
+                <span>Request Benchmark Suite</span> ↗
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Pillars Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- 1. Semantic Fidelity -->
+            <div class="bg-[#faf8f2] border border-[#0b0b0b]/10 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-[#0b0b0b]/25 transition-all">
+              <div>
+                <div class="text-[11px] font-mono uppercase tracking-wider text-[#5b5a55] flex items-center justify-between mb-2">
+                  <span>Semantic Fidelity</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-semibold font-mono">MMLU 5-Shot</span>
+                </div>
+                <div class="text-3xl sm:text-4xl font-light font-mono text-[#0b0b0b] tracking-tight">
+                  72.06%
+                </div>
+                <div class="text-xs font-mono font-medium text-[#0b0b0b] mt-1.5">
+                  Macro-Average (57 Subjects)
+                </div>
+                <p class="mt-3 text-xs text-[#5b5a55] leading-relaxed">
+                  <strong class="text-[#0b0b0b] font-medium">95.82% retention</strong> vs. 18.5GB BF16 baseline (75.20% uncompressed). Zero catastrophic degradation across humanities, STEM, and law.
+                </p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-[#0b0b0b]/10 text-[11px] font-mono text-emerald-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Validated Semantic Invariance
+              </div>
+            </div>
+
+            <!-- 2. Structural Integrity -->
+            <div class="bg-[#faf8f2] border border-[#0b0b0b]/10 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-[#0b0b0b]/25 transition-all">
+              <div>
+                <div class="text-[11px] font-mono uppercase tracking-wider text-[#5b5a55] flex items-center justify-between mb-2">
+                  <span>Structural Integrity</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] bg-emerald-100 text-emerald-800 font-semibold font-mono">LiveCodeBench v6</span>
+                </div>
+                <div class="text-3xl sm:text-4xl font-light font-mono text-[#0b0b0b] tracking-tight">
+                  30.0%
+                </div>
+                <div class="text-xs font-mono font-medium text-[#0b0b0b] mt-1.5">
+                  Pass@1 (100% AST Validity)
+                </div>
+                <p class="mt-3 text-xs text-[#5b5a55] leading-relaxed">
+                  Zero syntax distortion. Subspace residual bridges preserve recursive call stacks, edge control flow, and eliminate degenerate looping.
+                </p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-[#0b0b0b]/10 text-[11px] font-mono text-emerald-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 0.0% Repetition Degeneracy
+              </div>
+            </div>
+
+            <!-- 3. Execution Footprint -->
+            <div class="bg-[#faf8f2] border border-[#0b0b0b]/10 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-[#0b0b0b]/25 transition-all">
+              <div>
+                <div class="text-[11px] font-mono uppercase tracking-wider text-[#5b5a55] flex items-center justify-between mb-2">
+                  <span>Execution Footprint</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] bg-blue-100 text-blue-800 font-semibold font-mono">VRAM Profile</span>
+                </div>
+                <div class="text-3xl sm:text-4xl font-light font-mono text-[#0b0b0b] tracking-tight">
+                  5.71 GB
+                </div>
+                <div class="text-xs font-mono font-medium text-[#0b0b0b] mt-1.5">
+                  Static Weight Allocation
+                </div>
+                <p class="mt-3 text-xs text-[#5b5a55] leading-relaxed">
+                  <strong class="text-[#0b0b0b] font-medium">11.10 GB peak VRAM</strong> during complex legal context processing (1,534+ tokens). Compresses 18.5GB BF16 safely into 16GB VRAM.
+                </p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-[#0b0b0b]/10 text-[11px] font-mono text-blue-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Fits 16GB Consumer Tier
+              </div>
+            </div>
+
+            <!-- 4. Hardware Profile -->
+            <div class="bg-[#faf8f2] border border-[#0b0b0b]/10 rounded-xl p-5 sm:p-6 flex flex-col justify-between hover:border-[#0b0b0b]/25 transition-all">
+              <div>
+                <div class="text-[11px] font-mono uppercase tracking-wider text-[#5b5a55] flex items-center justify-between mb-2">
+                  <span>Hardware Profile</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] bg-purple-100 text-purple-800 font-semibold font-mono">RTX 5080 16GB</span>
+                </div>
+                <div class="text-3xl sm:text-4xl font-light font-mono text-[#0b0b0b] tracking-tight">
+                  14.7 TPS
+                </div>
+                <div class="text-xs font-mono font-medium text-[#0b0b0b] mt-1.5">
+                  Pure Tensor Core Throughput
+                </div>
+                <p class="mt-3 text-xs text-[#5b5a55] leading-relaxed">
+                  <strong class="text-[#0b0b0b] font-medium">0.0% WDDM PCIe paging</strong>. Pure Tensor Core execution with zero host RAM swap penalty or PCIe bandwidth throttling.
+                </p>
+              </div>
+              <div class="mt-5 pt-3 border-t border-[#0b0b0b]/10 text-[11px] font-mono text-purple-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span> 0.0 MB Host RAM Swapping
+              </div>
+            </div>
+          </div>
+
+          <!-- Enterprise Engineering Audit Box -->
+          <div class="mt-8 bg-[#111111] border border-[#27272a] rounded-xl p-5 sm:p-6 font-mono text-xs text-[#a1a1aa]">
+            <div class="flex flex-wrap items-center justify-between pb-3 mb-4 border-b border-[#262626] text-[11px]">
+              <div class="flex items-center gap-2 text-white font-medium">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>ENTERPRISE SPECIFICATION & AUDIT TELEMETRY · GEMMA 2 9B QTENSOR</span>
+              </div>
+              <span class="text-emerald-400 font-normal">AUDITED ON SILICON · 57 SUBJECT TASKS</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2.5 text-xs">
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Architecture Validation</span>
+                <span class="text-[#f5f5f7] font-semibold">Gemma 2 9B QTensor</span>
+              </div>
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Semantic Fidelity (MMLU 5-Shot)</span>
+                <span class="text-emerald-400 font-semibold">72.06% Macro-Average (95.82% retention vs. 18.5GB BF16 baseline)</span>
+              </div>
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Structural Integrity</span>
+                <span class="text-[#f5f5f7]">30.0% Pass@1 on LiveCodeBench v6 (100% AST Validity)</span>
+              </div>
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Execution Footprint</span>
+                <span class="text-[#f5f5f7]">5.71 GB static weight / 11.10 GB peak VRAM during complex legal context processing</span>
+              </div>
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Hardware Profile</span>
+                <span class="text-purple-300 font-semibold">14.7 TPS on consumer silicon (RTX 5080 16GB)</span>
+              </div>
+              <div class="flex items-center justify-between border-b border-[#222226] pb-2">
+                <span class="text-[#71717a]">Memory Bus & Paging</span>
+                <span class="text-emerald-400 font-semibold">Pure Tensor Core execution and 0.0% WDDM PCIe paging</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -764,11 +925,11 @@
             <div>
               <div class="flex items-center justify-between text-xs font-mono text-[#5b5a55] mb-3">
                 <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">GATED</span>
-                <span>4.80 GB</span>
+                <span>5.71 GB (11.10 GB Peak)</span>
               </div>
               <h3 class="font-sans font-bold text-lg text-[#0b0b0b] mb-1">gemma-2-9b-it-qtensor</h3>
               <p class="text-xs text-[#5b5a55] leading-relaxed mb-4">
-                Closed-form analytical subspace decomposition. Fits 8GB MacBooks and edge devices with high semantic retention.
+                Closed-form analytical subspace decomposition. 72.06% MMLU 5-shot retention (95.82% vs. BF16) and 30.0% Pass@1 on LiveCodeBench v6 with 14.7 TPS on RTX 5080.
               </p>
             </div>
             <button 
